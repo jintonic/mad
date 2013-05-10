@@ -1,13 +1,12 @@
-# Compiled Object files
-*.slo
-*.lo
-*.o
+*.[ado]
+*.d.*
 
-# Compiled Dynamic libraries
 *.so
-*.dylib
+*Dict*
+*.rootmap
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
+*.ps
+*.eps
+*.pdf
+*.exe
+*.root
