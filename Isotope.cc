@@ -33,7 +33,7 @@ Double_t Isotope::CNNSdXS(Double_t nuclearRecoilEnergy, Double_t neutrinoEnergy)
    if (neutrinoEnergy<=evmin) return 0;
 
    Double_t sin2thetaw = 0.231;
-   Double_t qw = fN - (1-4*sin2thetaw) * fZ;
+   Double_t qw = (fN-fZ) - (1-4*sin2thetaw) * fZ;
 
    Double_t f2 = F2(nuclearRecoilEnergy);
 
