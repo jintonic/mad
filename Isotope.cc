@@ -9,16 +9,16 @@ using namespace TMath;
 //______________________________________________________________________________
 //
 
-Double_t Isotope::F2(Double_t nuclearRecoilEnergy,Double_t nuclearSkinThickness) 
+Double_t Isotope::F2(Double_t nuclearRecoilEnergy) 
 {
    if (nuclearRecoilEnergy==0) return 1.0; // no momentum transfer
 
    Double_t q2 = 2*fM*nuclearRecoilEnergy;
    Double_t q = Sqrt(q2); // MeV
-   Double_t r0= Sqrt(fR*fR-5*nuclearSkinThickness*nuclearSkinThickness); // mm
+   Double_t r0= Sqrt(fR*fR-5*fS*fS); // mm
    Double_t qr0 = q*r0/hbarc; // convert r0 from mm to natural unit MeV^-1
    Double_t j1= (Sin(qr0)-qr0*Cos(qr0))/(qr0)/(qr0); // Levin & Smith, 1996
-   Double_t s2= nuclearSkinThickness/hbarc * nuclearSkinThickness/hbarc;
+   Double_t s2= fS/hbarc * fS/hbarc;
    Double_t f =3.*j1/qr0*Exp(-q2*s2/2.);
    return f*f;
 }
@@ -44,3 +44,7 @@ Double_t Isotope::CNNSdXS(Double_t nuclearRecoilEnergy, Double_t neutrinoEnergy)
        (1-nuclearRecoilEnergy/neutrinoEnergy) -
        fM*nuclearRecoilEnergy/neutrinoEnergy/neutrinoEnergy) *qw*qw*f2;
 }
+
+//______________________________________________________________________________
+//
+

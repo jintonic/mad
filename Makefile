@@ -72,6 +72,9 @@ HEADERS = $(SOURCES:.cc=.h)
 OBJECTS = $(SOURCES:.cc=.o)
 DEPFILE = $(SOURCES:.cc=.d)
 
+EXESRCS = $(wildcard *.C)
+EXES = $(EXESRCS:.C=.exe)
+
 LINKDEF = LinkDef.h
 
 
@@ -101,14 +104,14 @@ RLIBMAP = rlibmap
 # the first target is the default target, it depends on $(ROOTMAP)
 # before "make all", make will include all other makefiles specified
 # by the include command
-all: $(ROOTMAP)
+all: $(EXES)
 	@echo
 	@echo "* Done!"
 	@echo 
 
 # include *.d files, which are makefiles defining dependencies between files
-ifeq ($(filter info clean,$(MAKECMDGOALS)),)
-  -include $(DEPFILE)
+ifeq ($(filter info clean tags,$(MAKECMDGOALS)),)
+  -include $(DEPFILE) # - tells make to continue if dependence files do not exist
 endif
 
 # rules to create *.d files
@@ -162,14 +165,18 @@ info:
 	@echo "flags:    $(CXXFLAGS)"
 	@echo "libs:     $(LIBS)"
 	@echo
+	@echo "executables:$(EXES)"
+	@echo
 
 clean:
-	$(RM) *.o *.d *.d.* *~ *Dict* $(ROOTMAP) $(LIBRARY)
+	$(RM) *.o *.exe *.d *.d.* *~ *Dict* $(ROOTMAP) $(LIBRARY)
 
 tags:
 	ctags --c-kinds=+p $(HEADERS) $(SOURCES)
 
-%.exe:%.C
+%.exe:%.C $(ROOTMAP)
+	@echo
+	@echo "* Create executables:"
 	$(CXX) $< $(CXXFLAGS) $(LIBS) -lGeom -L. -lDetectors -o $@
 
 .PHONY: all info tags clean
