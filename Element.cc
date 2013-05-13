@@ -126,7 +126,7 @@ TF1* Element::FormFactor2(Double_t maxNuclearRecoilEnergy)
 
 Double_t Element::CNNSdXSF(Double_t *x, Double_t *parameters)
 {
-   return CNNSdXS(x[0]*keV,x[1]*MeV);
+   return CNNSdXS(x[0]*keV,x[1]*MeV)*GeV*GeV*GeV;
 }
 
 //______________________________________________________________________________
@@ -141,7 +141,7 @@ TF2* Element::CNNSdXSF2(
             0.,maxNeutrinoEnergy/MeV,0,"Element","CNNSdXSF");
       fDXS->GetXaxis()->SetTitle("nuclear recoil energy [keVnr]");
       fDXS->GetYaxis()->SetTitle("neutrino energy [MeV]");
-      fDXS->GetZaxis()->SetTitle("differential cross section [1/MeV^{3}]");
+      fDXS->GetZaxis()->SetTitle("differential cross section [1/GeV^{3}]");
       fDXS->GetZaxis()->CenterTitle();
       fDXS->GetZaxis()->SetTitleOffset(-0.5);
    }
@@ -153,7 +153,7 @@ TF2* Element::CNNSdXSF2(
 
 Double_t Element::CNNSdXSEr(Double_t *x, Double_t *parameters)
 {
-   return CNNSdXS(x[0]*keV,parameters[0]*MeV);
+   return CNNSdXS(x[0]*keV,parameters[0]*MeV)*GeV*GeV*GeV;
 }
 
 //______________________________________________________________________________
@@ -168,7 +168,7 @@ TF1* Element::CNNSdXSFEr(
       fDXSEr->SetParameter(0,neutrinoEnergy/MeV);
       fDXSEr->SetTitle(Form("%.1f MeV neutrino", neutrinoEnergy/MeV));
       fDXSEr->GetXaxis()->SetTitle("nuclear recoil energy [keVnr]");
-      fDXSEr->GetYaxis()->SetTitle("differential cross section [1/MeV^{3}]");
+      fDXSEr->GetYaxis()->SetTitle("differential cross section [1/GeV^{3}]");
    }
    return fDXSEr;
 }
@@ -177,7 +177,9 @@ TF1* Element::CNNSdXSFEr(
 //
 
 Double_t Element::CNNSdXSEv(Double_t *x, Double_t *parameters)
-{ return CNNSdXS(parameters[0]*keV,x[0]*MeV); }
+{
+   return CNNSdXS(parameters[0]*keV,x[0]*MeV)*GeV*GeV*GeV;
+}
 
 //______________________________________________________________________________
 //
@@ -192,7 +194,7 @@ TF1* Element::CNNSdXSFEv(
       fDXSEv->SetTitle(Form("%.1f keVnr nuclear recoil",
                nuclearRecoilEnergy/keV));
       fDXSEv->GetXaxis()->SetTitle("neutrino energy [MeV]");
-      fDXSEv->GetYaxis()->SetTitle("differential cross section [1/MeV^{3}]");
+      fDXSEv->GetYaxis()->SetTitle("differential cross section [1/GeV^{3}]");
    }
    return fDXSEv;
 }
