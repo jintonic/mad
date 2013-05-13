@@ -1,16 +1,25 @@
 #include "Element.h"
 #include "Isotope.h"
 
-#include <TF1.h>
 #include <TAxis.h>
 
-#include <CLHEP/Units/SystemOfUnits.h>
 using namespace CLHEP;
 
 //______________________________________________________________________________
 //
 
-Double_t Element::Meff() const
+Element::~Element()
+{
+   if (fF2) delete fF2;
+   if (fDXS) delete fDXS;
+   if (fDXSEr) delete fDXSEr;
+   if (fDXSEv) delete fDXSEv;
+}
+
+//______________________________________________________________________________
+//
+
+Double_t Element::M() const
 {
    if (!fNisotopes) return 0;
 
@@ -29,7 +38,7 @@ Double_t Element::Meff() const
 //______________________________________________________________________________
 //
 
-Double_t Element::Reff() const
+Double_t Element::R() const
 {
    if (!fNisotopes) return 0;
 
@@ -92,7 +101,9 @@ Double_t Element::CNNSdXS(Double_t nuclearRecoilEnergy, Double_t neutrinoEnergy)
 //
 
 Double_t Element::FF(Double_t *x, Double_t *parameters) 
-{ return F2(x[0]*keV); }
+{
+   return F2(x[0]*keV);
+}
 
 //______________________________________________________________________________
 //
@@ -100,10 +111,10 @@ Double_t Element::FF(Double_t *x, Double_t *parameters)
 TF1* Element::FormFactor2(Double_t maxNuclearRecoilEnergy) 
 {
    if (!fF2) {
-      fF2 = new TF1(Form("F2^%f_%f",Meff(),Reff()),
-            this,&Element::FF,0,maxNuclearRecoilEnergy,0);
+      fF2 = new TF1(Form("F2^%f_%f",M(),R()),
+            this,&Element::FF,0,maxNuclearRecoilEnergy/keV,0);
       fF2->SetLineColor(kBlack);
-      fF2->SetTitle("Nuclear form factor squared");
+      fF2->SetTitle(Form("%s nuclear form factor squared",GetTitle()));
       fF2->GetXaxis()->SetTitle("nuclear recoil energy [keVnr]");
       fF2->GetYaxis()->SetTitle("F^{2}");
    }
@@ -114,19 +125,77 @@ TF1* Element::FormFactor2(Double_t maxNuclearRecoilEnergy)
 //
 
 Double_t Element::CNNSdXSF(Double_t *x, Double_t *parameters)
-{ return CNNSdXS(x[0]*keV,x[1]*MeV); }
+{
+   return CNNSdXS(x[0]*keV,x[1]*MeV);
+}
+
+//______________________________________________________________________________
+//
+
+TF2* Element::CNNSdXSF2(
+      Double_t maxNuclearRecoilEnergy, Double_t maxNeutrinoEnergy) 
+{
+   if (!fDXS) {
+      fDXS = new TF2(Form("fxs^%f_%f",M(),R()),
+            this,&Element::CNNSdXSF,0.,maxNuclearRecoilEnergy/keV,
+            0.,maxNeutrinoEnergy/MeV,0,"Element","CNNSdXSF");
+      fDXS->GetXaxis()->SetTitle("nuclear recoil energy [keVnr]");
+      fDXS->GetYaxis()->SetTitle("neutrino energy [MeV]");
+      fDXS->GetZaxis()->SetTitle("differential cross section [1/MeV^{3}]");
+      fDXS->GetZaxis()->CenterTitle();
+      fDXS->GetZaxis()->SetTitleOffset(-0.5);
+   }
+   return fDXS;
+}
 
 //______________________________________________________________________________
 //
 
 Double_t Element::CNNSdXSEr(Double_t *x, Double_t *parameters)
-{ return CNNSdXS(x[0]*keV,parameters[0]*MeV); }
+{
+   return CNNSdXS(x[0]*keV,parameters[0]*MeV);
+}
+
+//______________________________________________________________________________
+//
+
+TF1* Element::CNNSdXSFEr(
+      Double_t neutrinoEnergy, Double_t maxNuclearRecoilEnergy) 
+{
+   if (!fDXSEr) {
+      fDXSEr = new TF1(Form("fxser^%f_%f",M(),R()),
+            this,&Element::CNNSdXSEr,0.,maxNuclearRecoilEnergy/keV,1);
+      fDXSEr->SetParameter(0,neutrinoEnergy/MeV);
+      fDXSEr->SetTitle(Form("%.1f MeV neutrino", neutrinoEnergy/MeV));
+      fDXSEr->GetXaxis()->SetTitle("nuclear recoil energy [keVnr]");
+      fDXSEr->GetYaxis()->SetTitle("differential cross section [1/MeV^{3}]");
+   }
+   return fDXSEr;
+}
 
 //______________________________________________________________________________
 //
 
 Double_t Element::CNNSdXSEv(Double_t *x, Double_t *parameters)
 { return CNNSdXS(parameters[0]*keV,x[0]*MeV); }
+
+//______________________________________________________________________________
+//
+
+TF1* Element::CNNSdXSFEv(
+      Double_t nuclearRecoilEnergy, Double_t maxNeutrinoEnergy) 
+{
+   if (!fDXSEv) {
+      fDXSEv = new TF1(Form("fxsev^%f_%f",M(),R()),
+            this,&Element::CNNSdXSEv,0.,maxNeutrinoEnergy/MeV,1);
+      fDXSEv->SetParameter(0,nuclearRecoilEnergy/keV);
+      fDXSEv->SetTitle(Form("%.1f keVnr nuclear recoil",
+               nuclearRecoilEnergy/keV));
+      fDXSEv->GetXaxis()->SetTitle("neutrino energy [MeV]");
+      fDXSEv->GetYaxis()->SetTitle("differential cross section [1/MeV^{3}]");
+   }
+   return fDXSEv;
+}
 
 //______________________________________________________________________________
 //

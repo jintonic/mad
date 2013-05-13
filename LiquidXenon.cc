@@ -51,7 +51,7 @@ TGraphErrors* LiquidXenon::Leff()
       fLeff->SetTitle("Scintillation efficiency of liquid xenon");
       fLeff->GetXaxis()->SetTitle("Nuclear recoil energy [keVnr]");
       fLeff->GetYaxis()->SetTitle("L_{eff}");
-      fLeff->GetYaxis()->SetRangeUser(0,0.4);
+      fLeff->GetYaxis()->SetRangeUser(0,0.25);
    }
    return fLeff;
 }

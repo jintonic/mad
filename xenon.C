@@ -1,7 +1,8 @@
 #include "NaturalXe.h"
 #include "LiquidXenon.h"
 
-#include <TF2.h>
+using namespace CLHEP;
+
 #include <TCanvas.h>
 
 #include <iostream>
@@ -9,34 +10,30 @@ using namespace std;
 
 int main()
 {
-   NaturalXe *natXe = new NaturalXe; // element
-   LiquidXenon *LXe = new LiquidXenon; // material
-   LXe->SetElement(natXe);
-
-   natXe->Print();
-   LXe->Print();
-
-   TF2 *fxs = new TF2("fxs",natXe,&Element::CNNSdXSF,
-         0,50/*keV*/,0,100/*MeV*/,0,"Element","CNNSdXSF");
-   TF1 *fEr = new TF1("fEr",natXe,&NaturalXe::CNNSdXSEr,0,50/*keV*/,1);
-   fEr->SetParameter(0,50/*MeV*/);
-   TF1 *fEv = new TF1("fEv",natXe,&NaturalXe::CNNSdXSEv,0,100/*MeV*/,1);
-   fEv->SetParameter(0,50/*keV*/);
-
    TCanvas *can = new TCanvas;
+   can->SetRightMargin(0.15);
    can->Print("xenon.ps[");
 
-   natXe->FormFactor2()->Draw();
+   NaturalXe *natXe = new NaturalXe; // element
+   natXe->Print();
+
+   Double_t neutrinoEnergy, nuclearRecoilEnergy;
+
+   natXe->FormFactor2(nuclearRecoilEnergy=50*keV)->Draw();
    can->Print("xenon.ps");
 
-   fxs->Draw("colz");
+   natXe->CNNSdXSF2()->Draw("colz");
    can->Print("xenon.ps");
 
-   fEr->Draw();
+   natXe->CNNSdXSFEr(neutrinoEnergy=50*MeV)->Draw();
    can->Print("xenon.ps");
 
-   fEv->Draw();
+   natXe->CNNSdXSFEv(nuclearRecoilEnergy=1*keV)->Draw();
    can->Print("xenon.ps");
+
+   LiquidXenon *LXe = new LiquidXenon; // material
+   LXe->SetElement(natXe);
+   LXe->Print();
 
    can->SetLogx();
    LXe->Leff()->Draw("al");
