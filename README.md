@@ -1,4 +1,1 @@
-detectors
-=========
-
-Detector database
+Material database

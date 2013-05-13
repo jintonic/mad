@@ -59,7 +59,8 @@ LIBS    += $(ROOTLIBS)
 
 ROOTCINT = rootcint
 
-ROOTIFIED_SOURCE := DetectorsDict.cc
+LIBNAME := Mad
+ROOTIFIED_SOURCE := $(LIBNAME)Dict.cc
 ROOTIFIED_HEADER := $(ROOTIFIED_SOURCE:.cc=.h)
 ROOTIFIED_OBJECT := $(ROOTIFIED_SOURCE:.cc=.o)
 
@@ -81,7 +82,7 @@ LINKDEF = LinkDef.h
 # Define LIBRARY, ROOTMAP & variables to create them
 # ==================================================
 
-LIBRARY = libDetectors.so
+LIBRARY = lib$(LIBNAME).so
 ROOTMAP = $(LIBRARY:.so=.rootmap)
 
 SYMBOLS = `nm -CPu $(LIBRARY) |\
@@ -122,7 +123,7 @@ endif
 	  sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
 	  rm -f $@.$$$$ 
 
-# libDetectors.rootmap can only be created after the creation of libDetectors.so. It
+# lib$(LIBNAME).rootmap can only be created after the creation of lib$(LIBNAME).so. It
 # tells ROOT the dependence among libraries. Putting it along with the
 # corresponding library allows one to use in CINT the functions defined in the
 # library without calling gSystem->Load("lib.so")
@@ -131,9 +132,9 @@ $(ROOTMAP): $(LIBRARY)
 	@echo "* Creating rootmap file:"
 	$(RLIBMAP) -o $(ROOTMAP) -l $(LIBRARY) -d $(DEPENDS) -c $(LINKDEF)
 
-# libDetectors.so depends on all *.o files.
+# lib$(LIBNAME).so depends on all *.o files.
 #  The flag "-shared" is used to create shared libs
-#  $@ represents the target, that is, libDetectors.so
+#  $@ represents the target, that is, lib$(LIBNAME).so
 #  $^ represents all the prerequisites, i.e., all *.o files
 $(LIBRARY): $(ROOTIFIED_OBJECT) $(OBJECTS)
 	@echo
@@ -177,6 +178,6 @@ tags:
 %.exe:%.C $(ROOTMAP)
 	@echo
 	@echo "* Create executables:"
-	$(CXX) $< $(CXXFLAGS) $(LIBS) -lGeom -L. -lDetectors -o $@
+	$(CXX) $< $(CXXFLAGS) $(LIBS) -lGeom -L. -l$(LIBNAME) -o $@
 
 .PHONY: all info tags clean
