@@ -10,7 +10,9 @@ class LiquidXenon : public TGeoMaterial
       TGraphErrors *fLeff;
 
    public:
-      LiquidXenon() : TGeoMaterial(), fLeff(0) { SetName("LXe"); }
+      LiquidXenon() 
+         : TGeoMaterial(), fLeff(0) 
+      { SetName("LXe"); SetTitle("liquid xenon"); }
       virtual ~LiquidXenon() { if (fLeff) delete fLeff; }
 
       void SetElement(TGeoElement *element=NULL);
