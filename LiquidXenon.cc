@@ -67,11 +67,3 @@ Double_t MAD::LiquidXenon::Eee(Double_t nuclearRecoilEnergy)
 
 //______________________________________________________________________________
 //
-
-void MAD::LiquidXenon::SetElement(TGeoElement *element)
-{ 
-   if (element==NULL) return;
-   fElement=element;
-   fA=element->A();
-   fZ=element->Z();
-}
