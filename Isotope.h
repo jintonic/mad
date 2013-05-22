@@ -2,7 +2,6 @@
 #define ISOTOPE_H
 
 #include <TGeoElement.h>
-#include <UNIC/Units.h>
 
 namespace MAD { class Isotope; }
 
@@ -14,9 +13,8 @@ class MAD::Isotope : public TGeoIsotope
       Double_t fS; // nuclear skin thickness
 
    public:
-      Isotope() : TGeoIsotope(), fM(0), fR(0), fS(1*UNIC::fermi) {};
-      Isotope(Int_t z, Int_t n) : 
-         TGeoIsotope(), fM(0), fR(0), fS(1*UNIC::fermi) { fZ=z; fN=n; }
+      Isotope();
+      Isotope(Int_t z, Int_t n);
       virtual ~Isotope() {};
 
       void SetA(Double_t atomicMass) { fA=atomicMass; }
@@ -33,6 +31,8 @@ class MAD::Isotope : public TGeoIsotope
 
       Int_t Z() { return fZ; }
       Int_t N() { return fN; }
+
+      virtual void Print(Option_t *option="");
 
       Double_t F2(Double_t nuclearRecoilEnergy); // form factor squared
 
