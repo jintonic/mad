@@ -1,23 +1,21 @@
 #ifndef LIQUIDXENON_H
 #define LIQUIDXENON_H
 
-#include <TGeoMaterial.h>
+#include "Material.h"
 #include <TGraphErrors.h>
 
 namespace MAD { class LiquidXenon; }
 
-class MAD::LiquidXenon : public TGeoMaterial
+class MAD::LiquidXenon : public Material
 {
    protected:
       TGraphErrors *fLeff;
 
    public:
       LiquidXenon() 
-         : TGeoMaterial(), fLeff(0) 
+         : Material(), fLeff(0) 
       { SetName("LXe"); SetTitle("liquid xenon"); }
       virtual ~LiquidXenon() { if (fLeff) delete fLeff; }
-
-      void SetElement(TGeoElement *element=NULL);
 
       TGraphErrors *Leff();
 
