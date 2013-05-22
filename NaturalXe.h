@@ -8,7 +8,7 @@ namespace MAD { class NaturalXe; }
 class MAD::NaturalXe : public Element
 {
    public:
-      NaturalXe();
+      NaturalXe(const char *name="NaturalXe", const char *title="Natural Xe");
       virtual ~NaturalXe();
 
       ClassDef(NaturalXe,1);
