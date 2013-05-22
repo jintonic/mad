@@ -4,7 +4,7 @@
 #include <TF2.h>
 #include <TGeoElement.h>
 
-#include <CLHEP/Units/SystemOfUnits.h>
+#include <UNIC/Units.h>
 
 class Element : public TGeoElement
 {
@@ -30,16 +30,16 @@ class Element : public TGeoElement
       Double_t M() const; // average nuclear mass
 
       Double_t F2(Double_t nuclearRecoilEnergy); // form factor squared
-      TF1* FormFactor2(Double_t maxNuclearRecoilEnergy=50*CLHEP::keV);
+      TF1* FormFactor2(Double_t maxNuclearRecoilEnergy=50*UNIC::keV);
 
       // CNNS differential cross section
       Double_t CNNSdXS(Double_t nuclearRecoilEnergy, Double_t neutrinoEnergy);
-      TF2* CNNSdXSF2(Double_t maxNuclearRecoilEnergy=50*CLHEP::keV, 
-            Double_t maxNeutrinoEnergy=100*CLHEP::MeV);
+      TF2* CNNSdXSF2(Double_t maxNuclearRecoilEnergy=50*UNIC::keV, 
+            Double_t maxNeutrinoEnergy=100*UNIC::MeV);
       TF1* CNNSdXSFEr(Double_t neutrinoEnergy,
-            Double_t maxNuclearRecoilEnergy=50*CLHEP::keV);
+            Double_t maxNuclearRecoilEnergy=50*UNIC::keV);
       TF1* CNNSdXSFEv(Double_t nuclearRecoilEnergy,
-            Double_t maxNeutrinoEnergy=100*CLHEP::MeV);
+            Double_t maxNeutrinoEnergy=100*UNIC::MeV);
 
       ClassDef(Element,1);
 };

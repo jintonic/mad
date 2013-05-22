@@ -43,10 +43,9 @@ ifneq ($(ALTCXX),)
   CXX = $(ALTCXX)
 endif
 
-# CLHEP
-CLHEPCONFIG = clhep-config
-CXXFLAGS+= $(shell $(CLHEPCONFIG) --include)
-LIBS    += $(shell $(CLHEPCONFIG) --libs)
+# dependence
+UNICSYS  = $(HOME)
+CXXFLAGS+= -I$(UNICSYS)/include
 
 # Finally, define CXXFLAGS & LIBS
 CXXFLAGS+= $(ROOTCFLAGS)

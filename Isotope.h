@@ -2,7 +2,7 @@
 #define ISOTOPE_HH
 
 #include <TGeoElement.h>
-#include <CLHEP/Units/SystemOfUnits.h>
+#include <UNIC/Units.h>
 
 class Isotope : public TGeoIsotope
 {
@@ -12,9 +12,9 @@ class Isotope : public TGeoIsotope
       Double_t fS; // nuclear skin thickness
 
    public:
-      Isotope() : TGeoIsotope(), fM(0), fR(0), fS(1*CLHEP::fermi) {};
+      Isotope() : TGeoIsotope(), fM(0), fR(0), fS(1*UNIC::fermi) {};
       Isotope(Int_t z, Int_t n) : 
-         TGeoIsotope(), fM(0), fR(0), fS(1*CLHEP::fermi) { fZ=z; fN=n; }
+         TGeoIsotope(), fM(0), fR(0), fS(1*UNIC::fermi) { fZ=z; fN=n; }
       virtual ~Isotope() {};
 
       void SetA(Double_t atomicMass) { fA=atomicMass; }

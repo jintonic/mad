@@ -1,7 +1,7 @@
 #include "NaturalXe.h"
 #include "LiquidXenon.h"
 
-using namespace CLHEP;
+using namespace UNIC;
 
 #include <TCanvas.h>
 

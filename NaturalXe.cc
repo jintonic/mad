@@ -1,8 +1,8 @@
 #include "NaturalXe.h"
 #include "Isotope.h"
 
-#include <CLHEP/Units/SystemOfUnits.h>
-using namespace CLHEP;
+#include <UNIC/Units.h>
+using namespace UNIC;
 
 //______________________________________________________________________________
 //

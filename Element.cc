@@ -3,7 +3,7 @@
 
 #include <TAxis.h>
 
-using namespace CLHEP;
+using namespace UNIC;
 
 //______________________________________________________________________________
 //

@@ -1,6 +1,6 @@
 #include "LiquidXenon.h"
 
-#include <CLHEP/Units/SystemOfUnits.h>
+#include <UNIC/Units.h>
 
 #include <TGraphErrors.h>
 #include <TAxis.h>
@@ -62,7 +62,7 @@ TGraphErrors* LiquidXenon::Leff()
 Double_t LiquidXenon::Eee(Double_t nuclearRecoilEnergy)
 {
    if (!fLeff) Leff();
-   return nuclearRecoilEnergy*fLeff->Eval(nuclearRecoilEnergy/CLHEP::keV);
+   return nuclearRecoilEnergy*fLeff->Eval(nuclearRecoilEnergy/UNIC::keV);
 }
 
 //______________________________________________________________________________

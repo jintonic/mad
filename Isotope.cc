@@ -1,7 +1,7 @@
 #include "Isotope.h"
 
-#include <CLHEP/Units/PhysicalConstants.h>
-using namespace CLHEP;
+#include <UNIC/Constants.h>
+using namespace UNIC;
 
 #include <TMath.h>
 using namespace TMath;
@@ -37,9 +37,7 @@ Double_t Isotope::CNNSdXS(Double_t nuclearRecoilEnergy, Double_t neutrinoEnergy)
 
    Double_t f2 = F2(nuclearRecoilEnergy);
 
-   Double_t gf = 1.166364e-5/GeV/GeV; // Fermi constant
-
-   return gf*gf*fM/8/pi * (1+
+   return GF*GF*fM/8/pi * (1+
        (1-nuclearRecoilEnergy/neutrinoEnergy)*
        (1-nuclearRecoilEnergy/neutrinoEnergy) -
        fM*nuclearRecoilEnergy/neutrinoEnergy/neutrinoEnergy) *qw*qw*f2;
