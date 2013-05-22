@@ -5,6 +5,7 @@ using namespace MAD;
 using namespace UNIC;
 
 #include <TCanvas.h>
+#include <TGraphErrors.h>
 
 #include <iostream>
 using namespace std;
@@ -20,20 +21,20 @@ int main()
 
    Double_t neutrinoEnergy, nuclearRecoilEnergy;
 
-   natXe->FormFactor2(nuclearRecoilEnergy=50*keV)->Draw();
+   natXe->FF2(nuclearRecoilEnergy=50*keV)->Draw();
    can->Print("xenon.ps");
 
-   natXe->CNNSdXSF2()->Draw("colz");
+   natXe->FCNNSdXS2D()->Draw("colz");
    can->Print("xenon.ps");
 
-   natXe->CNNSdXSFEr(neutrinoEnergy=50*MeV)->Draw();
+   natXe->FCNNSdXSEr(neutrinoEnergy=50*MeV)->Draw();
    can->Print("xenon.ps");
 
-   natXe->CNNSdXSFEv(nuclearRecoilEnergy=1*keV)->Draw();
+   natXe->FCNNSdXSEv(nuclearRecoilEnergy=1*keV)->Draw();
    can->Print("xenon.ps");
 
    LiquidXenon *LXe = new LiquidXenon; // material
-   LXe->SetElement(natXe);
+   LXe->AddElement(natXe,1);
    LXe->Print();
 
    can->SetLogx();
