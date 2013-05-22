@@ -23,12 +23,12 @@ Double_t Element::M() const
 {
    if (!fNisotopes) return 0;
 
-   Isotope *isocrt;
+   Isotope *isotope;
    Double_t weight = 0.0;
    Double_t meff = 0.0;
    for (Int_t i=0; i<fNisotopes; i++) {
-      isocrt = (Isotope*) fIsotopes->At(i);
-      meff += fAbundances[i] * isocrt->M();
+      isotope = (Isotope*) fIsotopes->At(i);
+      meff += fAbundances[i] * isotope->M();
       weight += fAbundances[i];
    }
    meff /= weight;
@@ -42,12 +42,12 @@ Double_t Element::R() const
 {
    if (!fNisotopes) return 0;
 
-   Isotope *isocrt;
+   Isotope *isotope;
    Double_t weight = 0.0;
    Double_t reff = 0.0;
    for (Int_t i=0; i<fNisotopes; i++) {
-      isocrt = (Isotope*) fIsotopes->At(i);
-      reff += fAbundances[i] * isocrt->R();
+      isotope = (Isotope*) fIsotopes->At(i);
+      reff += fAbundances[i] * isotope->R();
       weight += fAbundances[i];
    }
    reff /= weight;
@@ -62,13 +62,13 @@ Double_t Element::F2(Double_t nuclearRecoilEnergy)
    if (!fNisotopes) return 1.0;
    if (nuclearRecoilEnergy==0) return 1.0; // no momentum transfer
 
-   Isotope *isocrt;
+   Isotope *isotope;
    Double_t weight = 0.0;
    Double_t feff = 0.0;
    for (Int_t i=0; i<fNisotopes; i++) {
-      isocrt = (Isotope*) fIsotopes->At(i);
+      isotope = (Isotope*) fIsotopes->At(i);
       feff += fAbundances[i] * 
-         isocrt->F2(nuclearRecoilEnergy);
+         isotope->F2(nuclearRecoilEnergy);
       weight += fAbundances[i];
    }
    feff /= weight;
@@ -83,13 +83,13 @@ Double_t Element::CNNSdXS(Double_t nuclearRecoilEnergy, Double_t neutrinoEnergy)
 {
    if (!fNisotopes) return 0.0;
 
-   Isotope *isocrt;
+   Isotope *isotope;
    Double_t weight = 0.0;
    Double_t xseff = 0.0;
    for (Int_t i=0; i<fNisotopes; i++) {
-      isocrt = (Isotope*) fIsotopes->At(i);
+      isotope = (Isotope*) fIsotopes->At(i);
       xseff += fAbundances[i] * 
-         isocrt->CNNSdXS(nuclearRecoilEnergy,neutrinoEnergy);
+         isotope->CNNSdXS(nuclearRecoilEnergy,neutrinoEnergy);
       weight += fAbundances[i];
    }
    xseff /= weight;
