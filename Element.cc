@@ -8,7 +8,7 @@ using namespace UNIC;
 //______________________________________________________________________________
 //
 
-Element::~Element()
+MAD::Element::~Element()
 {
    if (fF2) delete fF2;
    if (fDXS) delete fDXS;
@@ -19,7 +19,7 @@ Element::~Element()
 //______________________________________________________________________________
 //
 
-Double_t Element::M() const
+Double_t MAD::Element::M() const
 {
    if (!fNisotopes) return 0;
 
@@ -38,7 +38,7 @@ Double_t Element::M() const
 //______________________________________________________________________________
 //
 
-Double_t Element::R() const
+Double_t MAD::Element::R() const
 {
    if (!fNisotopes) return 0;
 
@@ -57,7 +57,7 @@ Double_t Element::R() const
 //______________________________________________________________________________
 //
 
-Double_t Element::F2(Double_t nuclearRecoilEnergy) 
+Double_t MAD::Element::F2(Double_t nuclearRecoilEnergy) 
 {
    if (!fNisotopes) return 1.0;
    if (nuclearRecoilEnergy==0) return 1.0; // no momentum transfer
@@ -79,7 +79,7 @@ Double_t Element::F2(Double_t nuclearRecoilEnergy)
 //______________________________________________________________________________
 //
 
-Double_t Element::CNNSdXS(Double_t nuclearRecoilEnergy, Double_t neutrinoEnergy) 
+Double_t MAD::Element::CNNSdXS(Double_t nuclearRecoilEnergy, Double_t neutrinoEnergy) 
 {
    if (!fNisotopes) return 0.0;
 
@@ -100,7 +100,7 @@ Double_t Element::CNNSdXS(Double_t nuclearRecoilEnergy, Double_t neutrinoEnergy)
 //______________________________________________________________________________
 //
 
-Double_t Element::FF(Double_t *x, Double_t *parameters) 
+Double_t MAD::Element::FF(Double_t *x, Double_t *parameters) 
 {
    return F2(x[0]*keV);
 }
@@ -108,7 +108,7 @@ Double_t Element::FF(Double_t *x, Double_t *parameters)
 //______________________________________________________________________________
 //
 
-TF1* Element::FormFactor2(Double_t maxNuclearRecoilEnergy) 
+TF1* MAD::Element::FormFactor2(Double_t maxNuclearRecoilEnergy) 
 {
    if (!fF2) {
       fF2 = new TF1(Form("F2^%f_%f",M(),R()),
@@ -124,7 +124,7 @@ TF1* Element::FormFactor2(Double_t maxNuclearRecoilEnergy)
 //______________________________________________________________________________
 //
 
-Double_t Element::CNNSdXSF(Double_t *x, Double_t *parameters)
+Double_t MAD::Element::CNNSdXSF(Double_t *x, Double_t *parameters)
 {
    return CNNSdXS(x[0]*keV,x[1]*MeV)*GeV*GeV*GeV;
 }
@@ -132,13 +132,13 @@ Double_t Element::CNNSdXSF(Double_t *x, Double_t *parameters)
 //______________________________________________________________________________
 //
 
-TF2* Element::CNNSdXSF2(
+TF2* MAD::Element::CNNSdXSF2(
       Double_t maxNuclearRecoilEnergy, Double_t maxNeutrinoEnergy) 
 {
    if (!fDXS) {
       fDXS = new TF2(Form("fxs^%f_%f",M(),R()),
-            this,&Element::CNNSdXSF,0.,maxNuclearRecoilEnergy/keV,
-            0.,maxNeutrinoEnergy/MeV,0,"Element","CNNSdXSF");
+            this,&MAD::Element::CNNSdXSF,0.,maxNuclearRecoilEnergy/keV,
+            0.,maxNeutrinoEnergy/MeV,0,"MAD::Element","CNNSdXSF");
       fDXS->GetXaxis()->SetTitle("nuclear recoil energy [keVnr]");
       fDXS->GetYaxis()->SetTitle("neutrino energy [MeV]");
       fDXS->GetZaxis()->SetTitle("differential cross section [1/GeV^{3}]");
@@ -151,7 +151,7 @@ TF2* Element::CNNSdXSF2(
 //______________________________________________________________________________
 //
 
-Double_t Element::CNNSdXSEr(Double_t *x, Double_t *parameters)
+Double_t MAD::Element::CNNSdXSEr(Double_t *x, Double_t *parameters)
 {
    return CNNSdXS(x[0]*keV,parameters[0]*MeV)*GeV*GeV*GeV;
 }
@@ -159,12 +159,12 @@ Double_t Element::CNNSdXSEr(Double_t *x, Double_t *parameters)
 //______________________________________________________________________________
 //
 
-TF1* Element::CNNSdXSFEr(
+TF1* MAD::Element::CNNSdXSFEr(
       Double_t neutrinoEnergy, Double_t maxNuclearRecoilEnergy) 
 {
    if (!fDXSEr) {
       fDXSEr = new TF1(Form("fxser^%f_%f",M(),R()),
-            this,&Element::CNNSdXSEr,0.,maxNuclearRecoilEnergy/keV,1);
+            this,&MAD::Element::CNNSdXSEr,0.,maxNuclearRecoilEnergy/keV,1);
       fDXSEr->SetParameter(0,neutrinoEnergy/MeV);
       fDXSEr->SetTitle(Form("%.1f MeV neutrino", neutrinoEnergy/MeV));
       fDXSEr->GetXaxis()->SetTitle("nuclear recoil energy [keVnr]");
@@ -176,7 +176,7 @@ TF1* Element::CNNSdXSFEr(
 //______________________________________________________________________________
 //
 
-Double_t Element::CNNSdXSEv(Double_t *x, Double_t *parameters)
+Double_t MAD::Element::CNNSdXSEv(Double_t *x, Double_t *parameters)
 {
    return CNNSdXS(parameters[0]*keV,x[0]*MeV)*GeV*GeV*GeV;
 }
@@ -184,12 +184,12 @@ Double_t Element::CNNSdXSEv(Double_t *x, Double_t *parameters)
 //______________________________________________________________________________
 //
 
-TF1* Element::CNNSdXSFEv(
+TF1* MAD::Element::CNNSdXSFEv(
       Double_t nuclearRecoilEnergy, Double_t maxNeutrinoEnergy) 
 {
    if (!fDXSEv) {
       fDXSEv = new TF1(Form("fxsev^%f_%f",M(),R()),
-            this,&Element::CNNSdXSEv,0.,maxNeutrinoEnergy/MeV,1);
+            this,&MAD::Element::CNNSdXSEv,0.,maxNeutrinoEnergy/MeV,1);
       fDXSEv->SetParameter(0,nuclearRecoilEnergy/keV);
       fDXSEv->SetTitle(Form("%.1f keVnr nuclear recoil",
                nuclearRecoilEnergy/keV));

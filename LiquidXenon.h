@@ -4,7 +4,9 @@
 #include <TGeoMaterial.h>
 #include <TGraphErrors.h>
 
-class LiquidXenon : public TGeoMaterial
+namespace MAD { class LiquidXenon; }
+
+class MAD::LiquidXenon : public TGeoMaterial
 {
    protected:
       TGraphErrors *fLeff;
@@ -22,6 +24,6 @@ class LiquidXenon : public TGeoMaterial
       Double_t Eee(Double_t nuclearRecoilEnergy); // recoil energy in keVee
 
       ClassDef(LiquidXenon,1);
-}; // class LiquidXenon
+};
 
-#endif // LIQUIDXENON_H
+#endif

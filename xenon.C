@@ -1,5 +1,6 @@
 #include "NaturalXe.h"
 #include "LiquidXenon.h"
+using namespace MAD;
 
 using namespace UNIC;
 

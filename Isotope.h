@@ -4,7 +4,9 @@
 #include <TGeoElement.h>
 #include <UNIC/Units.h>
 
-class Isotope : public TGeoIsotope
+namespace MAD { class Isotope; }
+
+class MAD::Isotope : public TGeoIsotope
 {
    protected:
       Double_t fM; // nuclear mass
@@ -38,6 +40,6 @@ class Isotope : public TGeoIsotope
       Double_t CNNSdXS(Double_t nuclearRecoilEnergy, Double_t neutrinoEnergy);
 
       ClassDef(Isotope,1);
-}; // class Isotope
+};
 
-#endif // ISOTOPE_H
+#endif

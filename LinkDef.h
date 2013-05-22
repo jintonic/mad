@@ -1,6 +1,7 @@
 #ifdef __MAKECINT__
-#pragma link C++ class Isotope+;
-#pragma link C++ class Element+;
-#pragma link C++ class NaturalXe+;
-#pragma link C++ class LiquidXenon+;
+#pragma link C++ namespace MAD;
+#pragma link C++ class MAD::Isotope+;
+#pragma link C++ class MAD::Element+;
+#pragma link C++ class MAD::NaturalXe+;
+#pragma link C++ class MAD::LiquidXenon+;
 #endif

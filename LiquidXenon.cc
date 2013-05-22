@@ -8,7 +8,7 @@
 //______________________________________________________________________________
 //
 
-TGraphErrors* LiquidXenon::Leff()
+TGraphErrors* MAD::LiquidXenon::Leff()
 {
    const Int_t n = 50;
    Double_t x[n] = { 1, 1.12466, 1.26486, 1.42253, 1.59986, 1.79929, 2.02359,
@@ -59,7 +59,7 @@ TGraphErrors* LiquidXenon::Leff()
 //______________________________________________________________________________
 //
 
-Double_t LiquidXenon::Eee(Double_t nuclearRecoilEnergy)
+Double_t MAD::LiquidXenon::Eee(Double_t nuclearRecoilEnergy)
 {
    if (!fLeff) Leff();
    return nuclearRecoilEnergy*fLeff->Eval(nuclearRecoilEnergy/UNIC::keV);
@@ -68,7 +68,7 @@ Double_t LiquidXenon::Eee(Double_t nuclearRecoilEnergy)
 //______________________________________________________________________________
 //
 
-void LiquidXenon::SetElement(TGeoElement *element)
+void MAD::LiquidXenon::SetElement(TGeoElement *element)
 { 
    if (element==NULL) return;
    fElement=element;

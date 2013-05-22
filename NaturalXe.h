@@ -3,13 +3,15 @@
 
 #include "Element.h"
 
-class NaturalXe : public Element
+namespace MAD { class NaturalXe; }
+
+class MAD::NaturalXe : public Element
 {
    public:
       NaturalXe();
       virtual ~NaturalXe();
 
       ClassDef(NaturalXe,1);
-}; // class NaturalXe
+};
 
-#endif // NATURALXE_H
+#endif

@@ -7,7 +7,7 @@ using namespace UNIC;
 //______________________________________________________________________________
 //
 
-NaturalXe::NaturalXe() : Element(7)
+MAD::NaturalXe::NaturalXe() : Element(7)
 {
    // Add xenon isotopes based on the information listed below:
    // * nuclear masses and abundance: 
@@ -41,7 +41,7 @@ NaturalXe::NaturalXe() : Element(7)
 //______________________________________________________________________________
 //
 
-NaturalXe::~NaturalXe()
+MAD::NaturalXe::~NaturalXe()
 {
    // Set fIsotopes to be its own owner, 
    // so that it will delete all its contents when it is deleted

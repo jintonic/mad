@@ -6,7 +6,9 @@
 
 #include <UNIC/Units.h>
 
-class Element : public TGeoElement
+namespace MAD { class Element; }
+
+class MAD::Element : public TGeoElement
 {
    private:
       Double_t FF(Double_t *x, Double_t *parameters);
@@ -42,6 +44,6 @@ class Element : public TGeoElement
             Double_t maxNeutrinoEnergy=100*UNIC::MeV);
 
       ClassDef(Element,1);
-}; // class Element
+};
 
-#endif // ELEMENT_H
+#endif

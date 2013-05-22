@@ -9,7 +9,7 @@ using namespace TMath;
 //______________________________________________________________________________
 //
 
-Double_t Isotope::F2(Double_t nuclearRecoilEnergy) 
+Double_t MAD::Isotope::F2(Double_t nuclearRecoilEnergy) 
 {
    if (nuclearRecoilEnergy==0) return 1.0; // no momentum transfer
 
@@ -26,7 +26,7 @@ Double_t Isotope::F2(Double_t nuclearRecoilEnergy)
 //______________________________________________________________________________
 //
 
-Double_t Isotope::CNNSdXS(Double_t nuclearRecoilEnergy, Double_t neutrinoEnergy) 
+Double_t MAD::Isotope::CNNSdXS(Double_t nuclearRecoilEnergy, Double_t neutrinoEnergy) 
 {
    // incident neutrinos must be energetic enough to cause a nuclear recoil
    Double_t evmin = (nuclearRecoilEnergy+Sqrt(2*fM*nuclearRecoilEnergy))/2;
