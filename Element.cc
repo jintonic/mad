@@ -11,7 +11,7 @@ using namespace UNIC;
 MAD::Element::~Element()
 {
    if (fF2) delete fF2;
-   if (fDXS) delete fDXS;
+   if (fDXS2D) delete fDXS2D;
    if (fDXSEr) delete fDXSEr;
    if (fDXSEv) delete fDXSEv;
 }
@@ -79,6 +79,23 @@ Double_t MAD::Element::F2(Double_t nuclearRecoilEnergy)
 //______________________________________________________________________________
 //
 
+void MAD::Element::Print(Option_t *option)
+{
+   Printf("Element: %s Z=%d, N=%f, A=%f g/mole", 
+         GetName(), fZ, Neff(), fA/(gram/mole));
+   if (HasIsotopes()) {
+      for (Int_t i=0; i<fNisotopes; i++) {
+         Isotope *isotope = (Isotope*) GetIsotope(i);
+         Printf("=>Isotope %s, abundance=%5.2f%% :",
+               isotope->GetName(), fAbundances[i]/perCent);
+         isotope->Print(option);
+      }
+   }
+}
+
+//______________________________________________________________________________
+//
+
 Double_t MAD::Element::CNNSdXS(Double_t nuclearRecoilEnergy, Double_t neutrinoEnergy) 
 {
    if (!fNisotopes) return 0.0;
@@ -108,7 +125,7 @@ Double_t MAD::Element::FF(Double_t *x, Double_t *parameters)
 //______________________________________________________________________________
 //
 
-TF1* MAD::Element::FormFactor2(Double_t maxNuclearRecoilEnergy) 
+TF1* MAD::Element::FF2(Double_t maxNuclearRecoilEnergy) 
 {
    if (!fF2) {
       fF2 = new TF1(Form("F2^%f_%f",M(),R()),
@@ -124,7 +141,7 @@ TF1* MAD::Element::FormFactor2(Double_t maxNuclearRecoilEnergy)
 //______________________________________________________________________________
 //
 
-Double_t MAD::Element::CNNSdXSF(Double_t *x, Double_t *parameters)
+Double_t MAD::Element::CNNSdXS2D(Double_t *x, Double_t *parameters)
 {
    return CNNSdXS(x[0]*keV,x[1]*MeV)*GeV*GeV*GeV;
 }
@@ -132,20 +149,20 @@ Double_t MAD::Element::CNNSdXSF(Double_t *x, Double_t *parameters)
 //______________________________________________________________________________
 //
 
-TF2* MAD::Element::CNNSdXSF2(
+TF2* MAD::Element::FCNNSdXS2D(
       Double_t maxNuclearRecoilEnergy, Double_t maxNeutrinoEnergy) 
 {
-   if (!fDXS) {
-      fDXS = new TF2(Form("fxs^%f_%f",M(),R()),
-            this,&MAD::Element::CNNSdXSF,0.,maxNuclearRecoilEnergy/keV,
-            0.,maxNeutrinoEnergy/MeV,0,"MAD::Element","CNNSdXSF");
-      fDXS->GetXaxis()->SetTitle("nuclear recoil energy [keVnr]");
-      fDXS->GetYaxis()->SetTitle("neutrino energy [MeV]");
-      fDXS->GetZaxis()->SetTitle("differential cross section [1/GeV^{3}]");
-      fDXS->GetZaxis()->CenterTitle();
-      fDXS->GetZaxis()->SetTitleOffset(-0.5);
+   if (!fDXS2D) {
+      fDXS2D = new TF2(Form("fxs^%f_%f",M(),R()),
+            this,&MAD::Element::CNNSdXS2D,0.,maxNuclearRecoilEnergy/keV,
+            0.,maxNeutrinoEnergy/MeV,0,"Element","CNNSdXS2D");
+      fDXS2D->GetXaxis()->SetTitle("nuclear recoil energy [keVnr]");
+      fDXS2D->GetYaxis()->SetTitle("neutrino energy [MeV]");
+      fDXS2D->GetZaxis()->SetTitle("differential cross section [1/GeV^{3}]");
+      fDXS2D->GetZaxis()->CenterTitle();
+      fDXS2D->GetZaxis()->SetTitleOffset(-0.5);
    }
-   return fDXS;
+   return fDXS2D;
 }
 
 //______________________________________________________________________________
@@ -159,7 +176,7 @@ Double_t MAD::Element::CNNSdXSEr(Double_t *x, Double_t *parameters)
 //______________________________________________________________________________
 //
 
-TF1* MAD::Element::CNNSdXSFEr(
+TF1* MAD::Element::FCNNSdXSEr(
       Double_t neutrinoEnergy, Double_t maxNuclearRecoilEnergy) 
 {
    if (!fDXSEr) {
@@ -184,7 +201,7 @@ Double_t MAD::Element::CNNSdXSEv(Double_t *x, Double_t *parameters)
 //______________________________________________________________________________
 //
 
-TF1* MAD::Element::CNNSdXSFEv(
+TF1* MAD::Element::FCNNSdXSEv(
       Double_t nuclearRecoilEnergy, Double_t maxNeutrinoEnergy) 
 {
    if (!fDXSEv) {
