@@ -1,5 +1,5 @@
-#ifndef ELEMENT_HH
-#define ELEMENT_HH
+#ifndef ELEMENT_H
+#define ELEMENT_H
 
 #include <TF2.h>
 #include <TGeoElement.h>
@@ -42,6 +42,6 @@ class Element : public TGeoElement
             Double_t maxNeutrinoEnergy=100*UNIC::MeV);
 
       ClassDef(Element,1);
-};
+}; // class Element
 
-#endif // ELEMENT_HH
+#endif // ELEMENT_H

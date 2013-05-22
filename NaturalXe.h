@@ -1,5 +1,5 @@
-#ifndef NATURALXE_HH
-#define NATURALXE_HH
+#ifndef NATURALXE_H
+#define NATURALXE_H
 
 #include "Element.h"
 
@@ -10,6 +10,6 @@ class NaturalXe : public Element
       virtual ~NaturalXe();
 
       ClassDef(NaturalXe,1);
-};
+}; // class NaturalXe
 
-#endif // NATURALXE_HH
+#endif // NATURALXE_H

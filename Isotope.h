@@ -1,5 +1,5 @@
-#ifndef ISOTOPE_HH
-#define ISOTOPE_HH
+#ifndef ISOTOPE_H
+#define ISOTOPE_H
 
 #include <TGeoElement.h>
 #include <UNIC/Units.h>
@@ -38,6 +38,6 @@ class Isotope : public TGeoIsotope
       Double_t CNNSdXS(Double_t nuclearRecoilEnergy, Double_t neutrinoEnergy);
 
       ClassDef(Isotope,1);
-};
+}; // class Isotope
 
-#endif // ISOTOPE_HH
+#endif // ISOTOPE_H

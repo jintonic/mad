@@ -1,5 +1,5 @@
-#ifndef LIQUIDXENON_HH
-#define LIQUIDXENON_HH
+#ifndef LIQUIDXENON_H
+#define LIQUIDXENON_H
 
 #include <TGeoMaterial.h>
 #include <TGraphErrors.h>
@@ -22,6 +22,6 @@ class LiquidXenon : public TGeoMaterial
       Double_t Eee(Double_t nuclearRecoilEnergy); // recoil energy in keVee
 
       ClassDef(LiquidXenon,1);
-};
+}; // class LiquidXenon
 
-#endif // LIQUIDXENON_HH
+#endif // LIQUIDXENON_H
