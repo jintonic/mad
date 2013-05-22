@@ -1,10 +1,35 @@
 #include "Isotope.h"
 
+#include <UNIC/Units.h>
 #include <UNIC/Constants.h>
 using namespace UNIC;
 
 #include <TMath.h>
 using namespace TMath;
+
+//______________________________________________________________________________
+//
+
+MAD::Isotope::Isotope() : TGeoIsotope(), fM(0), fR(0), fS(1*UNIC::fermi) {};
+
+//______________________________________________________________________________
+//
+
+MAD::Isotope::Isotope(Int_t z, Int_t n) :
+   TGeoIsotope(), fM(0), fR(0), fS(1*UNIC::fermi) 
+{
+   fZ=z;
+   fN=n;
+}
+
+//______________________________________________________________________________
+//
+
+void MAD::Isotope::Print(Option_t *option)
+{
+   Printf("Isotope %s  Z=%d, N=%d, A=%f g/mole",
+         GetName(), fZ, fN, fA/(gram/mole));
+}
 
 //______________________________________________________________________________
 //
@@ -26,11 +51,12 @@ Double_t MAD::Isotope::F2(Double_t nuclearRecoilEnergy)
 //______________________________________________________________________________
 //
 
-Double_t MAD::Isotope::CNNSdXS(Double_t nuclearRecoilEnergy, Double_t neutrinoEnergy) 
+Double_t MAD::Isotope::CNNSdXS(
+      Double_t nuclearRecoilEnergy, Double_t neutrinoEnergy) 
 {
    // incident neutrinos must be energetic enough to cause a nuclear recoil
-   Double_t evmin = (nuclearRecoilEnergy+Sqrt(2*fM*nuclearRecoilEnergy))/2;
-   if (neutrinoEnergy<=evmin) return 0;
+   Double_t minEv = (nuclearRecoilEnergy+Sqrt(2*fM*nuclearRecoilEnergy))/2;
+   if (neutrinoEnergy<=minEv) return 0;
 
    Double_t sin2thetaw = 0.231;
    Double_t qw = (fN-fZ) - (1-4*sin2thetaw) * fZ;
@@ -38,9 +64,9 @@ Double_t MAD::Isotope::CNNSdXS(Double_t nuclearRecoilEnergy, Double_t neutrinoEn
    Double_t f2 = F2(nuclearRecoilEnergy);
 
    return GF*GF*fM/8/pi * (1+
-       (1-nuclearRecoilEnergy/neutrinoEnergy)*
-       (1-nuclearRecoilEnergy/neutrinoEnergy) -
-       fM*nuclearRecoilEnergy/neutrinoEnergy/neutrinoEnergy) *qw*qw*f2;
+         (1-nuclearRecoilEnergy/neutrinoEnergy)*
+         (1-nuclearRecoilEnergy/neutrinoEnergy) -
+         fM*nuclearRecoilEnergy/neutrinoEnergy/neutrinoEnergy) *qw*qw*f2;
 }
 
 //______________________________________________________________________________
