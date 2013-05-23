@@ -2,7 +2,7 @@
 #define LIQUIDXENON_H
 
 #include "Material.h"
-#include <TGraphErrors.h>
+class TGraphErrors;
 
 namespace MAD { class LiquidXenon; }
 
@@ -12,10 +12,9 @@ class MAD::LiquidXenon : public Material
       TGraphErrors *fLeff;
 
    public:
-      LiquidXenon() 
-         : Material(), fLeff(0) 
-      { SetName("LXe"); SetTitle("liquid xenon"); }
-      virtual ~LiquidXenon() { if (fLeff) delete fLeff; }
+      LiquidXenon(const char *name="LXe", const char *title="liquid xenon") 
+         : Material(name, title), fLeff(0) {};
+      virtual ~LiquidXenon();
 
       TGraphErrors *Leff();
 

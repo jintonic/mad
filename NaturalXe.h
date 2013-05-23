@@ -9,7 +9,7 @@ class MAD::NaturalXe : public Element
 {
    public:
       NaturalXe(const char *name="NaturalXe", const char *title="Natural Xe");
-      virtual ~NaturalXe();
+      virtual ~NaturalXe() {};
 
       ClassDef(NaturalXe,1);
 };

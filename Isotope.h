@@ -1,21 +1,30 @@
 #ifndef ISOTOPE_H
 #define ISOTOPE_H
 
-#include <TGeoElement.h>
+#include <TNamed.h>
 
 namespace MAD { class Isotope; }
 
-class MAD::Isotope : public TGeoIsotope
+class MAD::Isotope : public TNamed
 {
    protected:
+      UShort_t fZ; // atomic number
+      UShort_t fN; // number of nucleons
+      Double_t fA; // atomic mass
       Double_t fM; // nuclear mass
       Double_t fR; // nuclear radius
       Double_t fS; // nuclear skin thickness
 
    public:
       Isotope();
-      Isotope(Int_t z, Int_t n);
+      Isotope(UShort_t z, UShort_t n);
       virtual ~Isotope() {};
+
+      void SetZ(UShort_t atomicNumber) { fZ=atomicNumber; }
+      UShort_t Z() { return fZ; }
+
+      void SetN(UShort_t nNucleons) { fN=nNucleons; }
+      UShort_t N() { return fN; }
 
       void SetA(Double_t atomicMass) { fA=atomicMass; }
       Double_t A() { return fA; }
@@ -28,9 +37,6 @@ class MAD::Isotope : public TGeoIsotope
 
       void SetS(Double_t nuclearSkinThickness) { fS=nuclearSkinThickness; }
       Double_t S() { return fS; }
-
-      Int_t Z() { return fZ; }
-      Int_t N() { return fN; }
 
       virtual void Print(Option_t *option="");
 

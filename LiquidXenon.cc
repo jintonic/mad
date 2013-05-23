@@ -8,8 +8,18 @@
 //______________________________________________________________________________
 //
 
+MAD::LiquidXenon::~LiquidXenon()
+{
+   if (fLeff) delete fLeff;
+}
+
+//______________________________________________________________________________
+//
+
 TGraphErrors* MAD::LiquidXenon::Leff()
 {
+   if (fLeff) return fLeff;
+
    const Int_t n = 50;
    Double_t x[n] = { 1, 1.12466, 1.26486, 1.42253, 1.59986, 1.79929, 2.02359,
       2.27585, 2.55955, 2.87862, 3.23746, 3.64103, 4.09492, 4.60538, 5.17947,
@@ -46,13 +56,12 @@ TGraphErrors* MAD::LiquidXenon::Leff()
       dy[i] = yp[i] - y[i];
    }
 
-   if (!fLeff) {
-      fLeff = new TGraphErrors(n,x,y,dx,dy);
-      fLeff->SetTitle("Scintillation efficiency of liquid xenon");
-      fLeff->GetXaxis()->SetTitle("Nuclear recoil energy [keVnr]");
-      fLeff->GetYaxis()->SetTitle("L_{eff}");
-      fLeff->GetYaxis()->SetRangeUser(0,0.25);
-   }
+   fLeff = new TGraphErrors(n,x,y,dx,dy);
+   fLeff->SetTitle("Scintillation efficiency of liquid xenon");
+   fLeff->GetXaxis()->SetTitle("Nuclear recoil energy [keV]");
+   fLeff->GetYaxis()->SetTitle("L_{eff}");
+   fLeff->GetYaxis()->SetRangeUser(0,0.25);
+
    return fLeff;
 }
 
@@ -61,8 +70,7 @@ TGraphErrors* MAD::LiquidXenon::Leff()
 
 Double_t MAD::LiquidXenon::Eee(Double_t nuclearRecoilEnergy)
 {
-   if (!fLeff) Leff();
-   return nuclearRecoilEnergy*fLeff->Eval(nuclearRecoilEnergy/UNIC::keV);
+   return nuclearRecoilEnergy*Leff()->Eval(nuclearRecoilEnergy/UNIC::keV);
 }
 
 //______________________________________________________________________________

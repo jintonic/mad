@@ -2,8 +2,7 @@
 #include "LiquidXenon.h"
 using namespace MAD;
 
-using namespace UNIC;
-
+#include <TF2.h>
 #include <TCanvas.h>
 #include <TGraphErrors.h>
 
@@ -12,30 +11,26 @@ using namespace std;
 
 int main()
 {
+   NaturalXe *natXe = new NaturalXe; // element
+   LiquidXenon *LXe = new LiquidXenon; // material
+   LXe->AddElement(natXe,1);
+   LXe->Print();
+
    TCanvas *can = new TCanvas;
    can->SetRightMargin(0.15);
    can->Print("xenon.ps[");
 
-   NaturalXe *natXe = new NaturalXe; // element
-   natXe->Print();
-
-   Double_t neutrinoEnergy, nuclearRecoilEnergy;
-
-   natXe->FF2(nuclearRecoilEnergy=50*keV)->Draw();
+   natXe->FF2()->Draw();
    can->Print("xenon.ps");
 
    natXe->FCNNSdXS2D()->Draw("colz");
    can->Print("xenon.ps");
 
-   natXe->FCNNSdXSEr(neutrinoEnergy=50*MeV)->Draw();
+   natXe->FCNNSdXSEr()->Draw();
    can->Print("xenon.ps");
 
-   natXe->FCNNSdXSEv(nuclearRecoilEnergy=1*keV)->Draw();
+   natXe->FCNNSdXSEv()->Draw();
    can->Print("xenon.ps");
-
-   LiquidXenon *LXe = new LiquidXenon; // material
-   LXe->AddElement(natXe,1);
-   LXe->Print();
 
    can->SetLogx();
    LXe->Leff()->Draw("al");

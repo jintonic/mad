@@ -1,17 +1,33 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
 
-#include <TGeoMaterial.h>
+#include <TNamed.h>
+class TObjArray;
 
-namespace MAD { class Material; }
+namespace MAD {
+   class Material; 
+   class Element;
+}
 
-class MAD::Material : public TGeoMixture
+class MAD::Material : public TNamed
 {
-   public:
-      Material() : TGeoMixture() {};
-      virtual ~Material() {};
+   protected:
+      UShort_t   fNelements; // number of elements
+      UShort_t  *fNatoms;    // number of atoms in chemical formula 
+      Double_t  *fWeights;   // percentages of elements by weight
+      TObjArray *fElements;  // array of elements
 
-      virtual void AddElement(TGeoElement *element, Int_t nAtoms);
+   public:
+      Material() : TNamed(), fNelements(0), 
+      fNatoms(0), fWeights(0), fElements(0) {};
+      Material(const char* name, const char* title) : TNamed(name, title), 
+      fNelements(0), fNatoms(0), fWeights(0), fElements(0) {};
+      virtual ~Material();
+
+      virtual void AddElement(Element *element, UShort_t nAtoms);
+      Element* GetElement(UShort_t i); // return the i-th element
+
+      UShort_t Nelement() { return fNelements; }
 
       virtual void Print(Option_t *option="");
 
