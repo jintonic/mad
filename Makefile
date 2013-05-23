@@ -195,9 +195,11 @@ install:
 	@echo -n "copying lib$(LIBNAME).so to $(PREFIX)/lib..."
 	@if [ -d $(PREFIX)/lib ]; then \
 	  cp lib$(LIBNAME).so $(PREFIX)/lib; \
+	  cp lib$(LIBNAME).rootmap $(PREFIX)/lib; \
 	else \
 	  mkdir $(PREFIX)/lib; \
 	  cp lib$(LIBNAME).so $(PREFIX)/lib; \
+	  cp lib$(LIBNAME).rootmap $(PREFIX)/lib; \
 	fi; 
 	@echo "done."; 
 	@echo -n "copying *.h to $(PREFIX)/include/$(LIBNAME)..."
