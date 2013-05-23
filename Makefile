@@ -1,3 +1,8 @@
+PREFIX=$(HOME)
+UNIC=$(HOME)
+
+LIBNAME=MAD
+
 # Define CXX, CXXFLAGS, SOFLAGS & LIBS
 # ====================================
 
@@ -44,8 +49,7 @@ ifneq ($(ALTCXX),)
 endif
 
 # dependence
-UNICSYS  = $(HOME)
-CXXFLAGS+= -I$(UNICSYS)/include
+CXXFLAGS+= -I$(UNIC)/include
 
 # Finally, define CXXFLAGS & LIBS
 CXXFLAGS+= $(ROOTCFLAGS)
@@ -58,7 +62,6 @@ LIBS    += $(ROOTLIBS)
 
 ROOTCINT = rootcint
 
-LIBNAME := Mad
 ROOTIFIED_SOURCE := $(LIBNAME)Dict.cc
 ROOTIFIED_HEADER := $(ROOTIFIED_SOURCE:.cc=.h)
 ROOTIFIED_OBJECT := $(ROOTIFIED_SOURCE:.cc=.o)
@@ -179,4 +182,41 @@ tags:
 	@echo "* Create executables:"
 	$(CXX) $< $(CXXFLAGS) $(LIBS) -lGeom -L. -l$(LIBNAME) -o $@
 
-.PHONY: all info tags clean
+install:
+	@echo "PREFIX=$(PREFIX)"
+	@echo -n "checking if $(PREFIX) exists..."
+	@if [ -d $(PREFIX) ]; then \
+	  echo "yes."; \
+	else \
+	  echo "no."; \
+	  echo "mkdir $(PREFIX)..."; \
+	  mkdir $(PREFIX); \
+	fi
+	@echo -n "copying lib$(LIBNAME).so to $(PREFIX)/lib..."
+	@if [ -d $(PREFIX)/lib ]; then \
+	  cp lib$(LIBNAME).so $(PREFIX)/lib; \
+	else \
+	  mkdir $(PREFIX)/lib; \
+	  cp lib$(LIBNAME).so $(PREFIX)/lib; \
+	fi; 
+	@echo "done."; 
+	@echo -n "copying *.h to $(PREFIX)/include/$(LIBNAME)..."
+	@if [ -d $(PREFIX)/include ]; then \
+	  if [ -d $(PREFIX)/include/$(LIBNAME) ]; then \
+	    cp $(HEADERS) $(PREFIX)/include/$(LIBNAME); \
+	  else \
+	    mkdir $(PREFIX)/include/$(LIBNAME); \
+	    cp $(HEADERS) $(PREFIX)/include/$(LIBNAME); \
+	  fi; \
+	else \
+	  mkdir $(PREFIX)/include; \
+	  mkdir -p $(PREFIX)/include/$(LIBNAME); \
+	  cp *.h $(PREFIX)/include/$(LIBNAME); \
+	fi
+	@echo "done."
+
+uninstall:
+	$(RM) -r $(PREFIX)/include/$(LIBNAME)
+	$(RM) -r $(PREFIX)/lib/lib$(LIBNAME).so
+
+.PHONY: all info tags clean install uninstall
