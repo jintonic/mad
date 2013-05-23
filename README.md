@@ -2,7 +2,8 @@ mad - material database
 
 #####Concept
 It stores properties of isotopes, elements and materials for various purposes. 
-But it is not meant to be used for visualization or simulation.
+But it is not meant to be used for visualization or simulation,
+which can be done using ROOT or Geant4.
 
 All classes are nested in a namespace called ```MAD```.
 
