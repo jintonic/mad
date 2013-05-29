@@ -25,7 +25,7 @@ class MAD::Material : public TNamed
       virtual ~Material();
 
       virtual void AddElement(Element *element, UShort_t nAtoms);
-      Element* GetElement(UShort_t i); // return the i-th element
+      Element* GetElement(UShort_t i=0); // return the i-th element
 
       UShort_t Nelement() { return fNelements; }
 
