@@ -6,9 +6,6 @@ using namespace MAD;
 #include <TCanvas.h>
 #include <TGraphErrors.h>
 
-#include <iostream>
-using namespace std;
-
 int main()
 {
    NaturalXe *natXe = new NaturalXe; // element
@@ -34,6 +31,10 @@ int main()
 
    can->SetLogx();
    LXe->Leff()->Draw("al");
+   can->Print("xenon.ps");
+
+   can->SetLogx(0);
+   LXe->EnrEee()->Draw("al");
    can->Print("xenon.ps");
 
    can->Print("xenon.ps]");
