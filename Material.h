@@ -29,6 +29,9 @@ class MAD::Material : public TNamed
 
       UShort_t Nelements() { return fNelements; }
 
+      virtual Double_t Eee(Double_t energy_keVnr) =0;
+      virtual Double_t Enr(Double_t energy_keVee) =0;
+
       virtual void Print(Option_t *option="");
 
       ClassDef(Material,1);
