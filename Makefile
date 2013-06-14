@@ -177,13 +177,12 @@ clean:
 tags:
 	ctags --c-kinds=+p $(HEADERS) $(SOURCES)
 
-%.exe:%.C $(ROOTMAP)
-	@echo
-	@echo "* Create executables:"
+$(EXES): %.exe:%.C install
 	$(CXX) $< $(CXXFLAGS) $(LIBS) -lGeom -L. -l$(LIBNAME) -o $@
 
-install:
-	@echo "PREFIX=$(PREFIX)"
+install: $(ROOTMAP)
+	@echo
+	@echo "* Installing to PREFIX=$(PREFIX)"
 	@echo -n "checking if $(PREFIX) exists..."
 	@if [ -d $(PREFIX) ]; then \
 	  echo "yes."; \
@@ -216,6 +215,8 @@ install:
 	  cp *.h $(PREFIX)/include/$(LIBNAME); \
 	fi
 	@echo "done."
+	@echo
+	@echo "* Create executables:"
 
 uninstall:
 	$(RM) -r $(PREFIX)/include/$(LIBNAME)
