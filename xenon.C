@@ -2,6 +2,9 @@
 #include "LiquidXenon.h"
 using namespace MAD;
 
+#include "UNIC/Units.h"
+using namespace UNIC;
+
 #include <TF2.h>
 #include <TCanvas.h>
 #include <TGraphErrors.h>
@@ -29,10 +32,7 @@ int main()
    natXe->FCNNSdXSEv()->Draw();
    can->Print("xenon.ps");
 
-   LXe->EnrEee()->Draw("al");
-   can->Print("xenon.ps");
-
-   LXe->EnrPE(14.7)->Draw("al");
+   LXe->EnrPE(14.7*PE/keV)->Draw("al");
    can->Print("xenon.ps");
 
    can->SetLogx();
