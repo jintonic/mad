@@ -92,7 +92,7 @@ TGraphErrors* MAD::LiquidXenon::EnrPE(Double_t lightYield)
       0.199 }; // Leff
    Double_t x[n];
    for (Int_t i=0; i<n; i++) {
-      x[i] = l[i] * lightYield * 122.*keV;
+      x[i] = l[i] * lightYield * y[i]*keV;
    }
    Double_t dx[n]={0}, dy[n]={0};
 
