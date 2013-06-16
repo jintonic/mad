@@ -29,12 +29,14 @@ int main()
    natXe->FCNNSdXSEv()->Draw();
    can->Print("xenon.ps");
 
-   can->SetLogx();
-   LXe->Leff()->Draw("al");
+   LXe->EnrEee()->Draw("al");
    can->Print("xenon.ps");
 
-   can->SetLogx(0);
-   LXe->EnrEee()->Draw("al");
+   LXe->EnrPE(14.7)->Draw("al");
+   can->Print("xenon.ps");
+
+   can->SetLogx();
+   LXe->Leff()->Draw("al");
    can->Print("xenon.ps");
 
    can->Print("xenon.ps]");
