@@ -12,10 +12,7 @@ using namespace UNIC;
 
 MAD::Element::~Element()
 {
-   if (fF2) delete fF2;
-   if (fCNNSdXS2D) delete fCNNSdXS2D;
-   if (fCNNSdXSEr) delete fCNNSdXSEr;
-   if (fCNNSdXSEv) delete fCNNSdXSEv;
+   Clear();
    if (fAbundances) delete[] fAbundances;
 }
 
@@ -245,9 +242,7 @@ TF1* MAD::Element::FF2(Double_t maxEr)
    fF2 = new TF1(Form("F2^%f_%f",M(),R()),
          this, &Element::FormFactor2, 0, maxEr, 0);
    fF2->SetLineColor(kBlack);
-   fF2->SetTitle(Form("%s nuclear form factor squared",GetTitle()));
-   fF2->GetXaxis()->SetTitle("nuclear recoil energy [keV]");
-   fF2->GetYaxis()->SetTitle("F^{2}");
+   fF2->SetTitle(";nuclear recoil energy [keV];nuclear form factor squared");
    return fF2;
 }
 
@@ -267,9 +262,7 @@ TF2* MAD::Element::FCNNSdXS2D(Double_t maxEr, Double_t maxEv)
    if (fCNNSdXS2D) return fCNNSdXS2D;
    fCNNSdXS2D = new TF2(Form("fCNNSdXS2D^%f_%f",M(),R()), this,
          &Element::CNNSdXS2D, 0., maxEr, 0., maxEv, 0, "Element", "CNNSdXS2D");
-   fCNNSdXS2D->GetXaxis()->SetTitle("nuclear recoil energy [keV]");
-   fCNNSdXS2D->GetYaxis()->SetTitle("neutrino energy [MeV]");
-   fCNNSdXS2D->GetZaxis()->SetTitle("differential cross section [1/GeV^{3}]");
+   fCNNSdXS2D->SetTitle(";nuclear recoil energy [keV];neutrino energy [MeV];differential cross section [1/GeV^{3}]");
    fCNNSdXS2D->GetZaxis()->CenterTitle();
    fCNNSdXS2D->GetZaxis()->SetTitleOffset(-0.5);
    return fCNNSdXS2D;
@@ -292,9 +285,9 @@ TF1* MAD::Element::FCNNSdXSEr(Double_t Ev, Double_t maxEr)
    fCNNSdXSEr = new TF1(Form("fCNNSdXSEr^%f_%f",M(),R()),
          this, &Element::CNNSdXSEr, 0., maxEr, 1);
    fCNNSdXSEr->SetParameter(0,Ev);
-   fCNNSdXSEr->SetTitle(Form("%.1f MeV neutrino", Ev));
-   fCNNSdXSEr->GetXaxis()->SetTitle("nuclear recoil energy [keV]");
-   fCNNSdXSEr->GetYaxis()->SetTitle("differential cross section [1/GeV^{3}]");
+   fCNNSdXSEr->SetTitle(Form(
+            "%.1f MeV neutrino;nuclear recoil energy [keV];differential cross section [1/GeV^{3}]",
+            Ev));
    return fCNNSdXSEr;
 }
 
@@ -315,12 +308,51 @@ TF1* MAD::Element::FCNNSdXSEv(Double_t Er, Double_t maxEv)
    fCNNSdXSEv = new TF1(Form("fCNNSdXSEv^%f_%f",M(),R()),
          this, &Element::CNNSdXSEv, 0., maxEv, 1);
    fCNNSdXSEv->SetParameter(0,Er);
-   fCNNSdXSEv->SetTitle(Form("%.1f keV nuclear recoil", Er));
-   fCNNSdXSEv->GetXaxis()->SetTitle("neutrino energy [MeV]");
-   fCNNSdXSEv->GetYaxis()->SetTitle("differential cross section [1/GeV^{3}]");
+   fCNNSdXSEv->SetTitle(Form(
+            "%.1f keV nuclear recoil;neutrino energy [MeV];differential cross section [1/GeV^{3}]",
+            Er));
    return fCNNSdXSEv;
 }
 
 //______________________________________________________________________________
 //
 
+void MAD::Element::SetS(Double_t skinThickness)
+{
+   if (!fNisotopes) return;
+   if (skinThickness<=0) {
+      Warning("SetS","Skin thickness must be positive. Return.");
+      return;
+   }
+
+   Isotope *isotope;
+   for (UShort_t i=0; i<fNisotopes; i++) {
+      isotope = (Isotope*) fIsotopes->At(i);
+      isotope->SetS(skinThickness);
+   }
+
+   Clear();
+}
+
+//______________________________________________________________________________
+//
+
+void MAD::Element::Clear(Option_t *option)
+{
+   if (fF2) {
+      delete fF2;
+      fF2=0;
+   }
+   if (fCNNSdXS2D) {
+      delete fCNNSdXS2D;
+      fCNNSdXS2D=0;
+   }
+   if (fCNNSdXSEr) {
+      delete fCNNSdXSEr;
+      fCNNSdXSEr=0;
+   }
+   if (fCNNSdXSEv) {
+      delete fCNNSdXSEv;
+      fCNNSdXSEv=0;
+   }
+}
