@@ -48,8 +48,10 @@ class MAD::Element : public TNamed
       Double_t M() const; // average nuclear mass
       Double_t R() const; // average nuclear radius
       Double_t S() const; // nuclear skin thickness
+      void SetS(Double_t skinThickness);
 
       virtual void Print(Option_t *option="");
+      virtual void Clear(Option_t *Option="");
 
       Double_t F2(Double_t Er); // form factor squared
       TF1* FF2(Double_t maxEr=50./*keV*/);
