@@ -8,7 +8,7 @@ namespace MAD { class GeCrystal; }
 class MAD::GeCrystal : public Material
 {
    public:
-      GeCrystal(const char *name="GeCry", const char *title="Ge Crystal") 
+      GeCrystal(const char *name="GeCrystal", const char *title="Ge Crystal")
          : Material(name, title) {}; 
       virtual ~GeCrystal() {};
 

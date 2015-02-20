@@ -34,12 +34,12 @@ class MAD::Material : public TNamed
       /**
        * electron mobility
        */
-      virtual Double_t MuE(Int_t idx=100, Double_t T=0, Double_t E=0)
+      virtual Double_t MuE(Int_t idx, Double_t T, Double_t E)
       { return 0; }
       /**
        * hole mobility
        */
-      virtual Double_t MuH(Int_t idx=100, Double_t T=0, Double_t E=0)
+      virtual Double_t MuH(Int_t idx, Double_t T, Double_t E)
       { return 0; }
 
       ClassDef(Material,1);
