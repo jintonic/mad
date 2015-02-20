@@ -30,6 +30,11 @@ class MAD::Material : public TNamed
       UShort_t Nelements() { return fNelements; }
 
       virtual void Print(Option_t *option="");
+      
+     //Electron mobiliy, MuE; 
+     //Hole mobility, MuH;  
+      virtual Double_t MuE(Double_t T=0, Double_t E=0) {return 0};
+      virtual Double_t MuH(Double_t T=0, Double_t E=0) (return 0);
 
       ClassDef(Material,1);
 };

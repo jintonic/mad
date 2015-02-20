@@ -5,4 +5,6 @@
 #pragma link C++ class MAD::Material+;
 #pragma link C++ class MAD::NaturalXe+;
 #pragma link C++ class MAD::LiquidXenon+;
+#pragma link C++ class MAD::NaturalGe+;
+#pragma link C++ class MAD::GeCrystal+;
 #endif
