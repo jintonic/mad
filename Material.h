@@ -31,10 +31,16 @@ class MAD::Material : public TNamed
 
       virtual void Print(Option_t *option="");
       
-     //Electron mobiliy, MuE; 
-     //Hole mobility, MuH;  
-      virtual Double_t MuE(Double_t T=0, Double_t E=0) {return 0};
-      virtual Double_t MuH(Double_t T=0, Double_t E=0) (return 0);
+      /**
+       * electron mobility
+       */
+      virtual Double_t MuE(Int_t idx=100, Double_t T=0, Double_t E=0)
+      { return 0; }
+      /**
+       * hole mobility
+       */
+      virtual Double_t MuH(Int_t idx=100, Double_t T=0, Double_t E=0)
+      { return 0; }
 
       ClassDef(Material,1);
 };
