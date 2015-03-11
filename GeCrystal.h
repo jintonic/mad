@@ -10,8 +10,7 @@ class MAD::GeCrystal : public Material
    public:
       Double_t T; // temperature in K
    public:
-      GeCrystal(const char *name="GeCrystal", const char *title="Ge Crystal")
-         : Material(name, title) {}; 
+      GeCrystal(const char *name="GeCrystal", const char *title="Ge Crystal");
       virtual ~GeCrystal() {};
 
       Double_t MuEn(Int_t idx=100);
@@ -21,7 +20,7 @@ class MAD::GeCrystal : public Material
       Double_t MuE(Int_t idx=100, Double_t n=0);
       Double_t MuH(Int_t idx=100, Double_t n=0);
       Double_t Epsilon();
-
+      Double_t EffectiveMassRatio(const char *type="e");
       ClassDef(GeCrystal,1);
 };
 
