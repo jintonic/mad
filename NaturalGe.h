@@ -11,7 +11,6 @@ class MAD::NaturalGe : public Element
       NaturalGe(const char *name="NaturalGe", const char *title="Natural Ge");
       virtual ~NaturalGe() {};
 
-      Double EffectiveMassRatio(const char* type="e");
 
       ClassDef(NaturalGe,1);
 };

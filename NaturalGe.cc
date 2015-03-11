@@ -26,12 +26,3 @@ NaturalGe::NaturalGe(const char *name, const char *title) : Element(name, title)
    // so that it will delete all its contents when it is deleted
    fIsotopes->SetOwner();
 }
-
-//______________________________________________________________________________
-//
-
-Double_t NaturalGe::EffectiveMassRatio(const char * type)
-{
-   if (type=='e') return 0.12;
-   else return 0.21;
-}
