@@ -32,14 +32,9 @@ class MAD::Material : public TNamed
       virtual void Print(Option_t *option="");
       
       /**
-       * electron mobility
+       * Charge carrier mobility
        */
-      virtual Double_t MuE(Int_t idx, Double_t n)
-      { return 0; }
-      /**
-       * hole mobility
-       */
-      virtual Double_t MuH(Int_t idx, Double_t n)
+      virtual Double_t Mu(const char *type="e", Int_t idx=100, Double_t n=0)
       { return 0; }
 
       ClassDef(Material,1);

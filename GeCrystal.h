@@ -9,20 +9,28 @@ class MAD::GeCrystal : public Material
 {
    public:
       Double_t T; // temperature in K
+
    public:
       GeCrystal(const char *name="GeCrystal", const char *title="Ge Crystal");
       virtual ~GeCrystal() {};
 
-      Double_t MuEn(Int_t idx=100);
-      Double_t MuHn(Int_t idx=100);
-      Double_t MuEi(Double_t n=0);
-      Double_t MuHi(Double_t n=0);
-      Double_t MuE(Int_t idx=100, Double_t n=0);
-      Double_t MuH(Int_t idx=100, Double_t n=0);
-      Double_t Epsilon();
-      Double_t EffectiveMassRatio(const char *type="e");
+      /**
+       * Mobility determined by neutral impurity.
+       */
+      Double_t Mun(const char *type="e", Int_t idx=100);
+      /**
+       * Mobility determined by ionized impurity.
+       */
+      Double_t Mui(const char *type="e", Double_t n=0);
+      Double_t Mu(const char *type="e", Int_t idx=100, Double_t n=0)
+      { return 1./(1./Mun(type,idx) + 1./Mui(type,n)); }
+
+      Double_t Epsilon() ///< relative diaelectric constant
+      { return 16.2; }
+
+      Double_t EffectiveMassRatio(const char *type="e"); ///< m_e*/m_e
+
       ClassDef(GeCrystal,1);
 };
 
 #endif
-
