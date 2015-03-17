@@ -3,16 +3,19 @@
 
 #include "Material.h"
 
+class TGraph;
+
 namespace MAD { class GeCrystal; }
 
 class MAD::GeCrystal : public Material
 {
    public:
       Double_t T; // temperature in K
+      TGraph *gMuHallp, *gMuHalln;
 
    public:
       GeCrystal(const char *name="GeCrystal", const char *title="Ge Crystal");
-      virtual ~GeCrystal() {};
+      virtual ~GeCrystal();
 
       /**
        * Mobility determined by neutral impurity.
@@ -22,6 +25,14 @@ class MAD::GeCrystal : public Material
        * Mobility determined by ionized impurity.
        */
       Double_t Mui(const char *type="e", Double_t n=0);
+      /**
+       * Hall Mobility.
+       */
+      Double_t MuHall(const char *type="n", Double_t n=0);
+      /**
+       * Resistivity at n>1e18/cm3
+       */
+      Double_t Rho(const char *type="n", Double_t n=0);
       Double_t Mu(const char *type="e", Int_t idx=100, Double_t n=0)
       { return 1./(1./Mun(type,idx) + 1./Mui(type,n)); }
 

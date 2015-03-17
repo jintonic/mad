@@ -1,12 +1,16 @@
-#include "GeCrystal.h"
-using namespace MAD;
+#include <iostream>
+using namespace std;
 
-#include "UNIC/Units.h"
+#include <UNIC/Units.h>
 using namespace UNIC;
 
 #include <TF1.h>
 #include <TAxis.h>
 #include <TCanvas.h>
+#include <TGraph.h>
+
+#include "GeCrystal.h"
+using namespace MAD;
 
 GeCrystal *ge = new GeCrystal;
 
@@ -77,6 +81,14 @@ int main()
    fhi->Draw("same");
 
    can->Print("mobility.pdf");
+
+   can->Clear();
+   can->SetLogy();
+   cout<<ge->Rho("p",1e18/cm3)<<endl;
+   ge->gMuHallp->Draw("ac*");
+   ge->gMuHalln->Draw("c*");
+   can->Print("mobility.pdf");
+
    can->Print("mobility.pdf]");
 
    return 0;
