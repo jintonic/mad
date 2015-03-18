@@ -97,42 +97,63 @@ Double_t GeCrystal::Rho(const char *type, Double_t n)
    const Int_t np=100; // number of data points
    Double_t c[np] = { // impurity concentration
       8e20,
+      4e20,
       1e20,
+      4e19,
       1e19,
+      4e18,
       1e18,
+      4e17,
       1e17,
+      4e16,
       1e16,
+      4e15,
       1e15,
+      4e14,
       1e14,
    };
    Double_t rp[np] = { // resistivity for p-type Ge
-      9.9e-5,
-      5.0e-4,
-      2.1e-3,
-      1.1e-2,
-      5.9e-2,
-      2.5e-1,
-      3.5,
-      30.,
+      1.4e-4,  //8e20
+      2.25e-4, //4e20
+      5.0e-4,  //1e20
+      1.0e-3,  //4e19
+      2.1e-3,  //1e19
+      4.0e-3,  //4e18 
+      1.1e-2,  //1e18
+      2.0e-2,  //4e17
+      5.6e-2,  //1e17
+      1.25e-1, //4e16
+      4e-1,    //1e16
+      8e-1,    //4e15
+      3.5,     //1e15
+      8,       //4e14
+      30.,     //1e14
    };
    Double_t rn[np] = { // resistivity for n-type Ge
-      9.0e-5,
-      3.4e-4,
-      0.9e-3,
-      7.0e-3,
-      3.5e-2,
-      2.0e-1,
-      0.5,
-      9.,
+      1.0e-4, //8e20
+      1.5e-4, //4e20
+      3.5e-4, //1e20
+      5.8e-4, //4e19
+      1.5e-3, //1e19
+      2.5e-3, //4e18
+      7.0e-3, //1e18
+      1.3e-2, //4e17
+      3.5e-2, //1e17
+      6.0e-2, //4e16
+      2.0e-1, //1e16
+      4.3e-1, //4e15
+      1.5,    //1e15
+      3.75,   //4e14
+      20,     //1e14
    };
 
-   gRhop = new TGraph(8,c,rp);
+   gRhop = new TGraph(15,c,rp);
    gRhop->SetTitle("");
    gRhop->SetLineColor(kBlue);
    gRhop->GetXaxis()->SetTitle("impurity concentration [1/cm^{3}]");
    gRhop->GetYaxis()->SetTitle("resistivity [ohm #times cm]");
 
-   gRhon = new TGraph(8,c,rn);
+   gRhon = new TGraph(15,c,rn);
    gRhon->SetTitle("");
    gRhon->SetLineColor(kRed);
    gRhon->GetXaxis()->SetTitle("impurity concentration [1/cm^{3}]");
