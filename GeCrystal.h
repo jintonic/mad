@@ -11,7 +11,7 @@ class MAD::GeCrystal : public Material
 {
    public:
       Double_t T; // temperature in K
-      TGraph *gMuHallp, *gMuHalln;
+      TGraph *gRhop, *gRhon;
 
    public:
       GeCrystal(const char *name="GeCrystal", const char *title="Ge Crystal");

@@ -15,15 +15,15 @@ using namespace UNIC;
 //
 
 GeCrystal::GeCrystal(const char *name, const char *title) :
-   Material(name, title), T(77*kelvin), gMuHallp(0), gMuHalln(0) {}; 
+   Material(name, title), T(77*kelvin), gRhop(0), gRhon(0) {}; 
 
 //______________________________________________________________________________
 //
 
 GeCrystal::~GeCrystal()
 {
-   if (gMuHallp) delete gMuHallp;
-   if (gMuHalln) delete gMuHalln;
+   if (gRhop) delete gRhop;
+   if (gRhon) delete gRhon;
 }
 
 //______________________________________________________________________________
@@ -126,16 +126,18 @@ Double_t GeCrystal::Rho(const char *type, Double_t n)
       9.,
    };
 
-   gMuHallp = new TGraph(8,c,rp);
-   gMuHallp->SetTitle("");
-   gMuHallp->GetXaxis()->SetTitle("impurity concentration [1/cm^{3}]");
-   gMuHallp->GetYaxis()->SetTitle("resistivity [ohm #times cm]");
+   gRhop = new TGraph(8,c,rp);
+   gRhop->SetTitle("");
+   gRhop->SetLineColor(kBlue);
+   gRhop->GetXaxis()->SetTitle("impurity concentration [1/cm^{3}]");
+   gRhop->GetYaxis()->SetTitle("resistivity [ohm #times cm]");
 
-   gMuHalln = new TGraph(8,c,rn);
-   gMuHalln->SetTitle("");
-   gMuHalln->GetXaxis()->SetTitle("impurity concentration [1/cm^{3}]");
-   gMuHalln->GetYaxis()->SetTitle("resistivity [ohm #times cm]");
+   gRhon = new TGraph(8,c,rn);
+   gRhon->SetTitle("");
+   gRhon->SetLineColor(kRed);
+   gRhon->GetXaxis()->SetTitle("impurity concentration [1/cm^{3}]");
+   gRhon->GetYaxis()->SetTitle("resistivity [ohm #times cm]");
 
-   if (type[0]=='p') return gMuHallp->Eval(n/cm3)*ohm*cm;
-   else return gMuHalln->Eval(n/cm3)*ohm*cm;
+   if (type[0]=='p') return gRhop->Eval(n/cm3)*ohm*cm;
+   else return gRhon->Eval(n/cm3)*ohm*cm;
 }
