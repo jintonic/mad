@@ -8,6 +8,7 @@ using namespace UNIC;
 #include <TAxis.h>
 #include <TCanvas.h>
 #include <TGraph.h>
+#include <TLegend.h>
 
 #include "GeCrystal.h"
 using namespace MAD;
@@ -85,8 +86,16 @@ int main()
    can->Clear();
    can->SetLogy();
    cout<<ge->Rho("p",1e18/cm3)<<endl;
-   ge->gMuHallp->Draw("ac*");
-   ge->gMuHalln->Draw("c*");
+   ge->gRhop->Draw("ac*");
+   ge->gRhon->Draw("c*");
+
+   TLegend *leg = new TLegend(0.4,0.65,0.8,0.88);
+   //leg->SetFillColor(0);
+   //leg->SetBorderSize(0);
+   leg->AddEntry(ge->gRhop,"p-type","l");
+   leg->AddEntry(ge->gRhon,"n-type","l");
+   leg->Draw();
+
    can->Print("mobility.pdf");
 
    can->Print("mobility.pdf]");
