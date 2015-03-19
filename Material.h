@@ -31,12 +31,6 @@ class MAD::Material : public TNamed
 
       virtual void Print(Option_t *option="");
       
-      /**
-       * Charge carrier mobility
-       */
-      virtual Double_t Mu(const char *type="e", Int_t idx=100, Double_t n=0)
-      { return 0; }
-
       ClassDef(Material,1);
 };
 

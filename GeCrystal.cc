@@ -29,10 +29,10 @@ GeCrystal::~GeCrystal()
 //______________________________________________________________________________
 //
 
-Double_t GeCrystal::Mun(const char *type, Int_t idx)
+Double_t GeCrystal::Mu(char type, Int_t idx)
 {
    // refer to Jing Liu's PhD thesis
-   if (type[0]=='e') {
+   if (type=='e') {
       if (idx==111) return 42420*cm2/(volt*s);
       else if (idx==100) return 40180*cm2/(volt*s);
       else return (42420+40180)/2*cm2/(volt*s);
@@ -46,16 +46,11 @@ Double_t GeCrystal::Mun(const char *type, Int_t idx)
 //______________________________________________________________________________
 //
 
-Double_t GeCrystal::Mui(const char *type, Double_t n)
+Double_t GeCrystal::MuBH(char type, Double_t n)
 {
-   // refer to D. Chattopadhyay & H. Queisser, "Electron scattering by ionized
-   // impurities in semiconductors" Rev. Mod. Phys., vol. 53, no. 4, pp.
-   // 745–768, Oct. 1981. It is only valid up to n ~ 1e18 1/cm3
    Double_t kT=k_Boltzmann*T;
    Double_t eps=Epsilon()*epsilon0;
-   Double_t m=EffectiveMassRatio("e")*electron_mass_c2/c_light/c_light;
-   if (type[0]=='h')
-      m=EffectiveMassRatio("h")*electron_mass_c2/c_light/c_light;
+   Double_t m=EffectiveMassRatio(type)*electron_mass_c2/c_light/c_light;
    Double_t e=abs(electron_charge);
    Double_t up=24.*m*eps*kT*kT;
    Double_t dn=e*hbar_Planck*e*hbar_Planck;
@@ -65,35 +60,26 @@ Double_t GeCrystal::Mui(const char *type, Double_t n)
 //______________________________________________________________________________
 //
 
-Double_t GeCrystal::EffectiveMassRatio(const char * type)
+Double_t GeCrystal::EffectiveMassRatio(char type)
 {
-   if (type[0]=='e') return 0.12;
+   if (type=='e') return 0.12;
    else return 0.21;
 }
 
 //______________________________________________________________________________
 //
 
-Double_t GeCrystal::MuHall(const char *type, Double_t n)
+Double_t GeCrystal::MuHall(char type, Double_t n)
 {
-   // mu = v/E = (I/A/q/n)/(U/l) = 1/(Aqnl)/R = 1/(Aqn/l)/(rho*l/A) = 1/qn*rho
    Double_t e=abs(electron_charge);
-   return 1./e/n/Rho(type,n);
+   return 1./e/n/Rho('n',n);
 }
 
 //______________________________________________________________________________
 //
 
-Double_t GeCrystal::Rho(const char *type, Double_t n)
+Double_t GeCrystal::Rho(char type, Double_t n)
 {
-   // The relation between resistivity, rho, and impurity concentration, n, is
-   // taken from S. M. Sze and J. C. Irvin, "Resistivity, mobility and impurity
-   // levels in GaAs, Ge, and Si at 300 K" Solid. State. Electron., vol. 11,
-   // no. 6, pp. 599–602, Jun. 1968. According to C. Hung and J. Gliessman,
-   // "Resistivity and Hall Effect of Germanium at Low Temperatures" Phys.
-   // Rev., vol. 96, no. 5, pp. 1226–1236, Dec. 1954, when n>4e18/cm3, the
-   // resistivity does not change with temperature. The result from measurement
-   // at 300K can also be used at 77K.
    const Int_t np=100; // number of data points
    Double_t c[np] = { // impurity concentration
       8e20,
@@ -112,7 +98,7 @@ Double_t GeCrystal::Rho(const char *type, Double_t n)
       4e14,
       1e14,
    };
-   Double_t rp[np] = { // resistivity for p-type Ge
+   Double_t rp[np] = { // resistivity for p-type Ge at 300K
       1.4e-4,  //8e20
       2.25e-4, //4e20
       5.0e-4,  //1e20
@@ -129,7 +115,7 @@ Double_t GeCrystal::Rho(const char *type, Double_t n)
       8,       //4e14
       30.,     //1e14
    };
-   Double_t rn[np] = { // resistivity for n-type Ge
+   Double_t rn[np] = { // resistivity for n-type Ge at 300K
       1.0e-4, //8e20
       1.5e-4, //4e20
       3.5e-4, //1e20
@@ -159,6 +145,6 @@ Double_t GeCrystal::Rho(const char *type, Double_t n)
    gRhon->GetXaxis()->SetTitle("impurity concentration [1/cm^{3}]");
    gRhon->GetYaxis()->SetTitle("resistivity [ohm #times cm]");
 
-   if (type[0]=='p') return gRhop->Eval(n/cm3)*ohm*cm;
-   else return gRhon->Eval(n/cm3)*ohm*cm;
+   if (type=='p') return gRhop->Eval(n*cm3)*ohm*cm;
+   else return gRhon->Eval(n*cm3)*ohm*cm;
 }
