@@ -16,7 +16,7 @@ using namespace MAD;
 GeCrystal *ge = new GeCrystal;
 
 double mh(double *x, double *p)
-{ return ge->Mu('h',100)/(cm2/(volt*s)); }
+{ return ge->Mu('h',x[0]/cm3)/(cm2/(volt*s)); }
 
 double mhBH(double *x, double *p)
 { return ge->MuBH('h',x[0]/cm3)/(cm2/(volt*s)); }
@@ -25,7 +25,7 @@ double mhHall(double *x, double *p)
 { return ge->MuHall('h',x[0]/cm3)/(cm2/(volt*s)); }
 
 double me(double *x, double *p)
-{ return ge->Mu('e',100)/cm2*volt*s; }
+{ return ge->Mu('e',x[0]/cm3)/cm2*volt*s; }
 
 double meBH(double *x, double *p)
 { return ge->MuBH('e',x[0]/cm3)/cm2*volt*s; }
@@ -47,18 +47,19 @@ int main()
    fh->GetYaxis()->SetTitle("mobility[cm^{2}/(Vs)]");
    fh->GetYaxis()->SetTitleOffset(1.5);
    fh->GetYaxis()->SetRangeUser(1,1e6);
+   fh->SetLineColor(kRed); //Red for holes
    fh->Draw();
 
    TF1 *fhh = new TF1("fhh",mhHall,4e18,8e20,0);
    fhh->SetLineStyle(kDashed);
-   fhh->Draw("same");
+//   fhh->Draw("same");
 
    TF1 *fhb = new TF1("fhb",mhBH,1e14,1e18,0);
    fhb->SetLineStyle(kDotted);
-   fhb->Draw("same");
+//   fhb->Draw("same");
 
-   can->Print("mobility.pdf");
-   can->Clear();
+//   can->Print("mobility.pdf");
+//   can->Clear();
 
    TF1 *fe = new TF1("fe",me,1e9,1e21,0);
    fe->GetXaxis()->SetTitle("charge carrier concentration [1/cm^{3}]");
@@ -66,16 +67,17 @@ int main()
    fe->GetYaxis()->SetTitle("mobility[cm^{2}/(Vs)]");
    fe->GetYaxis()->SetTitleOffset(1.5);
    fe->GetYaxis()->SetRangeUser(1,1e6);
-   fe->Draw();
+   fe->SetLineColor(kBlue); //Blue for electrons 
+   fe->Draw("same");
 
    TF1 *feh = new TF1("feh",meHall,4e18,8e20,0);
    feh->SetLineStyle(kDashed);
    cout<<ge->Rho('n',8e20/cm3)/ohm/cm<<", "<<ge->MuHall('e',8e20/cm3)/cm3*volt*s<<endl;
-   feh->Draw("same");
+//   feh->Draw("same");
 
    TF1 *feb = new TF1("feb",meBH,1e14,1e18,0);
    feb->SetLineStyle(kDotted);
-   feb->Draw("same");
+//   feb->Draw("same");
    can->Print("mobility.pdf");
 
    //cout<<ge->Rho("p",1e18/cm3)<<endl;
