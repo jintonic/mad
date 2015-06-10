@@ -18,10 +18,15 @@ class MAD::GeCrystal : public Material
       virtual ~GeCrystal();
 
       /**
+       * Total mobility.
+       */
+      Double_t Mu(char type='e', Double_t n=0);
+      /**
        * Measured mobility of HPGe at 77K.
        * Refer to Jing LIU's Ph.D. thesis.
+       * Neutral impurity contributes most.
        */
-      Double_t Mu(char type='e', Int_t idx=100);
+      Double_t MuN(char type='e', Int_t idx=100);
       /**
        * Mobility based on BH model.
        * Refer to D. Chattopadhyay & H. Queisser, "Electron scattering by
