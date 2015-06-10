@@ -29,7 +29,28 @@ GeCrystal::~GeCrystal()
 //______________________________________________________________________________
 //
 
-Double_t GeCrystal::Mu(char type, Int_t idx)
+Double_t GeCrystal::Mu(char type, Double_t n)
+{
+  if (type=='e'){
+     if (n<1e16/cm3) return MuN(type);
+     else if (n>=1e16/cm3 && n<5e17/cm3) return MuBH(type,n);
+     else if (n>=5e17/cm3 && n<4e18/cm3) 
+        return MuBH(type,5e17/cm3);
+     else return MuHall(type, n);  
+  }
+  else{
+    if (n<3e15/cm3) return MuN(type);
+    else if (n>=3e15/cm3 && n<1e18/cm3) return MuBH(type,n);
+    else if (n>=1e18/cm3 && n<4e18/cm3) 
+       return MuBH(type,1e18/cm3);
+    else return MuHall(type, n);
+  }
+}
+
+//______________________________________________________________________________
+//
+
+Double_t GeCrystal::MuN(char type, Int_t idx)
 {
    // refer to Jing Liu's PhD thesis
    if (type=='e') {
@@ -72,7 +93,8 @@ Double_t GeCrystal::EffectiveMassRatio(char type)
 Double_t GeCrystal::MuHall(char type, Double_t n)
 {
    Double_t e=abs(electron_charge);
-   return 1./e/n/Rho('n',n);
+   if (type=='e') return 1./e/n/Rho('n',n);
+   else return 1./e/n/Rho('p',n);  
 }
 
 //______________________________________________________________________________
