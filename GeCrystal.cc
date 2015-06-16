@@ -2,6 +2,7 @@
 using namespace MAD;
 
 #include <cmath>
+//#include <iostream>
 using namespace std;
 
 #include <UNIC/Units.h>
@@ -32,18 +33,25 @@ GeCrystal::~GeCrystal()
 Double_t GeCrystal::Mu(char type, Double_t n)
 {
   if (type=='e'){
-     if (n<1e16/cm3) return MuN(type);
-     else if (n>=1e16/cm3 && n<5e17/cm3) return MuBH(type,n);
-     else if (n>=5e17/cm3 && n<4e18/cm3) 
-        return MuBH(type,5e17/cm3);
-     else return MuHall(type, n);  
+     //if (n<1e17/cm3) return 1/(1/MuN(type)+1/MuBH(type,n));
+     
+     // else if (n>=5e17/cm3 && n<1e18/cm3) return 1/(1/MuN(type)+1/MuBH(type,n)+1/MuHall(type,n));
+     //else if (n>=5e17/cm3 && n<4e18/cm3) 
+       // return MuBH(type,5e17/cm3);
+    // else return MuHall(type, n);
+    // else
+    // cout<<n*cm3<<", "<<MuN(type)/cm2*volt*s<<", "<<pow(10, -0.46*log10(n*cm3)+11.51)<<endl;
+     //cout<< (1/(1/MuN(type)+1/(pow(10, -0.46*log(n*cm3)+11.51)*cm2/volt/s)))/cm2*volt*s<<endl;  
+     return 1/(1/MuN(type)+1/(pow(10, -0.46*log10(n*cm3)+11.51)*cm2/volt/s));  
   }
   else{
-    if (n<3e15/cm3) return MuN(type);
-    else if (n>=3e15/cm3 && n<1e18/cm3) return MuBH(type,n);
-    else if (n>=1e18/cm3 && n<4e18/cm3) 
-       return MuBH(type,1e18/cm3);
-    else return MuHall(type, n);
+   // if (n<1e17/cm3) return 1/(1/MuN(type)+1/MuBH(type,n));
+    //else if (n>=1e14/cm3 && n<1e18/cm3) return 1/(1/MuN(type)+1/MuBH(type,n)+1/MuHall(type,n));
+   // else if (n>=1e18/cm3 && n<4e18/cm3) 
+     //  return MuBH(type,1e18/cm3);
+   // else return MuHall(type, n);
+   // else 
+       return 1/(1/MuN(type)+1/(pow(10, -0.44*log10(n*cm3)+10.98)*cm2/volt/s));
   }
 }
 
@@ -76,6 +84,7 @@ Double_t GeCrystal::MuBH(char type, Double_t n)
    Double_t up=24.*m*eps*kT*kT;
    Double_t dn=e*hbar_Planck*e*hbar_Planck;
    return 128.*sqrt(2*pi*kT*kT*kT/m)*eps*eps/n/e/e/e/log(up/dn/n);
+    
 }
 
 //______________________________________________________________________________
@@ -93,8 +102,10 @@ Double_t GeCrystal::EffectiveMassRatio(char type)
 Double_t GeCrystal::MuHall(char type, Double_t n)
 {
    Double_t e=abs(electron_charge);
-   if (type=='e') return 1./e/n/Rho('n',n);
-   else return 1./e/n/Rho('p',n);  
+   if (type=='e') 
+      return 1./e/n/Rho('n',n);
+   else 
+      return 1./e/n/Rho('p',n);
 }
 
 //______________________________________________________________________________
