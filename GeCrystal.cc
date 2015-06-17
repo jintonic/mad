@@ -32,27 +32,12 @@ GeCrystal::~GeCrystal()
 
 Double_t GeCrystal::Mu(char type, Double_t n)
 {
-  if (type=='e'){
-     //if (n<1e17/cm3) return 1/(1/MuN(type)+1/MuBH(type,n));
-     
-     // else if (n>=5e17/cm3 && n<1e18/cm3) return 1/(1/MuN(type)+1/MuBH(type,n)+1/MuHall(type,n));
-     //else if (n>=5e17/cm3 && n<4e18/cm3) 
-       // return MuBH(type,5e17/cm3);
-    // else return MuHall(type, n);
-    // else
-    // cout<<n*cm3<<", "<<MuN(type)/cm2*volt*s<<", "<<pow(10, -0.46*log10(n*cm3)+11.51)<<endl;
-     //cout<< (1/(1/MuN(type)+1/(pow(10, -0.46*log(n*cm3)+11.51)*cm2/volt/s)))/cm2*volt*s<<endl;  
-     return 1/(1/MuN(type)+1/(pow(10, -0.46*log10(n*cm3)+11.51)*cm2/volt/s));  
-  }
-  else{
-   // if (n<1e17/cm3) return 1/(1/MuN(type)+1/MuBH(type,n));
-    //else if (n>=1e14/cm3 && n<1e18/cm3) return 1/(1/MuN(type)+1/MuBH(type,n)+1/MuHall(type,n));
-   // else if (n>=1e18/cm3 && n<4e18/cm3) 
-     //  return MuBH(type,1e18/cm3);
-   // else return MuHall(type, n);
-   // else 
-       return 1/(1/MuN(type)+1/(pow(10, -0.44*log10(n*cm3)+10.98)*cm2/volt/s));
-  }
+   if (n<1e10/cm3) n=1e10/cm3;
+   if (n>1e21/cm3) n=1e21/cm3;
+   if (type=='e')
+      return 1/(1/MuN(type)+1/(pow(10, -0.46*log10(n*cm3)+11.51)*cm2/volt/s));  
+   else
+      return 1/(1/MuN(type)+1/(pow(10, -0.44*log10(n*cm3)+10.98)*cm2/volt/s));
 }
 
 //______________________________________________________________________________
@@ -84,7 +69,7 @@ Double_t GeCrystal::MuBH(char type, Double_t n)
    Double_t up=24.*m*eps*kT*kT;
    Double_t dn=e*hbar_Planck*e*hbar_Planck;
    return 128.*sqrt(2*pi*kT*kT*kT/m)*eps*eps/n/e/e/e/log(up/dn/n);
-    
+
 }
 
 //______________________________________________________________________________
