@@ -18,7 +18,7 @@ MAD::Na::Na(const char *name, const char *title)
   Isotope *Na[ni];
   for (int i=0;i<ni;i++)
   {
-    Na[i]=new iostope(11,n[i]);
+    Na[i]=new Isotope(11,n[i]);
     Na[i]->SetA(a[i]);
     Na[i]->SetM(m[i]);
     Na[i]->SetR(r[i]);

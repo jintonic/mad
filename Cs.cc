@@ -18,7 +18,7 @@ MAD::Cs::Cs(const char *name, const char *title)
   Isotope *Cs[ni];
   for (int i=0;i<ni;i++)
   {
-    Cs[i]=new iostope(55,n[i]);
+    Cs[i]=new Isotope(55,n[i]);
     Cs[i]->SetA(a[i]);
     Cs[i]->SetM(m[i]);
     Cs[i]->SetR(r[i]);

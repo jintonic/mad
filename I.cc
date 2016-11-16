@@ -18,7 +18,7 @@ MAD::I::I(const char *name, const char *title)
   Isotope *I[ni];
   for (int i=0;i<ni;i++)
   {
-    I[i]=new iostope(53,n[i]);
+    I[i]=new Isotope(53,n[i]);
     I[i]->SetA(a[i]);
     I[i]->SetM(m[i]);
     I[i]->SetR(r[i]);
