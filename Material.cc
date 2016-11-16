@@ -10,6 +10,7 @@ MAD::Material::~Material()
 {
    if (fNatoms) delete[] fNatoms;
    if (fWeights) delete[] fWeights;
+   if (fElements) delete[] fElements;
 }
 
 //______________________________________________________________________________
