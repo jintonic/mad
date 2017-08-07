@@ -7,6 +7,7 @@
 #pragma link C++ class MAD::LiquidXenon+;
 #pragma link C++ class MAD::NaturalGe+;
 #pragma link C++ class MAD::GeCrystal+;
+#pragma link C++ class MAD::TlDopedCsI+;
 #pragma link C++ class MAD::I+;
 #pragma link C++ class MAD::Cs+;
 #pragma link C++ class MAD::Na+;
