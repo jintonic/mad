@@ -8,19 +8,20 @@ class TGraphErrors;
 
 namespace MAD { class TlDopedCsI; }
 
-class MAD::CsI: public Material
+class MAD::TlDopedCsI: public Material
 {
-  public:
-    TlDopedCsI(const char *name="TlDopedCsI", const char *title="TlDopedCsI")
-      :Material(name , title) { AddElement(new I(),1); AddElement(new Cs(),1); }
-    virtual ~TlDopedCsI() { if (fQFvsEnr) delete fQFvsEnr; }
+   protected:
+      TGraphErrors* fQFvsEnr;
 
-    TGraphErrors* QFvsEnr();
+   public:
+      TlDopedCsI(const char *name="TlDopedCsI", const char *title="TlDopedCsI")
+         :Material(name , title), fQFvsEnr(0)
+         { AddElement(new I(),1); AddElement(new Cs(),1); }
+      virtual ~TlDopedCsI();
 
-    classDef(TlDopedCsI,1);
+      TGraphErrors* QFvsEnr();
 
-  protected:
-    TGraphErrors* fQFvsEnr;
-}
+      ClassDef(TlDopedCsI,1);
+};
 
 #endif
