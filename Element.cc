@@ -27,8 +27,8 @@ void MAD::Element::AddIsotope(Isotope *isotope, Double_t abundance)
       return;
    }
 
-   if (abundance<=0) {
-      Warning("AddIsotope", "The abundance <= zero!");
+   if (abundance<0) {
+      Warning("AddIsotope", "The abundance < zero!");
       Warning("AddIsotope", "Failed to add isotope!");
       return;
    }
@@ -49,7 +49,7 @@ void MAD::Element::AddIsotope(Isotope *isotope, Double_t abundance)
 
    Double_t totalAbundance=0;
    for (UShort_t i=0; i<fNisotopes; i++) totalAbundance+=fAbundances[i];
-   if (totalAbundance>=1.) {
+   if (totalAbundance>1.) {
       Warning("AddIsotope", "Total abundance exceeds 100%%!");
       Warning("AddIsotope", "Failed to add new isotope!");
       return;
