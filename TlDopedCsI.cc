@@ -1,10 +1,20 @@
-#include "TlDopedCsI.h"
-#include <TGraphErrors.h>
+#include <TF1.h>
 #include <TAxis.h>
+#include <TGraphErrors.h>
 
-MAD::TlDopedCsI::~TlDopedCsI() { if (fQFvsEnr) delete fQFvsEnr; }
-      
-TGraphErrors* MAD::TlDopedCsI::QFvsEnr()
+#include "TlDopedCsI.h"
+using namespace MAD;
+
+TlDopedCsI::~TlDopedCsI()
+{
+   if (fQFvsEnr) delete fQFvsEnr;
+   if (fLindhardQF) delete fLindhardQF;
+}
+
+//______________________________________________________________________________
+//
+ 
+TGraphErrors* TlDopedCsI::QFvsEnr()
 {
    if (fQFvsEnr) return fQFvsEnr;
 
@@ -34,4 +44,29 @@ TGraphErrors* MAD::TlDopedCsI::QFvsEnr()
    fQFvsEnr->GetYaxis()->SetTitleOffset(1.2);
 
    return fQFvsEnr;
+}
+
+//______________________________________________________________________________
+//
+
+double TlDopedCsI::LindhardQF(double *x, double *par)
+{
+   double k = par[0];
+   double Enr = x[0];
+   double z = 54; // average of I (53) and Cs (55)
+   double eps = 11.5*Enr*pow(z,-7./3);
+   double g = 3*pow(eps,0.15) + 0.7*pow(eps,0.6) + eps;
+   return k*g/(1+k*g);
+}
+
+//______________________________________________________________________________
+//
+
+double TlDopedCsI::QF(double Enr)
+{
+   if (!fLindhardQF) fLindhardQF = new TF1("fLindhardQF",this,
+         &TlDopedCsI::LindhardQF,0.1,100,1);
+   fLindhardQF->SetParName(0,"k");
+   QFvsEnr()->Fit(fLindhardQF);
+   return fLindhardQF->Eval(Enr);
 }

@@ -1,3 +1,5 @@
+#include <iostream>
+using namespace std;
 #include "TlDopedCsI.h"
 using namespace MAD;
 
@@ -15,6 +17,8 @@ int main()
    can->Print("TlDopedCsI.pdf[");
 
    crystal->QFvsEnr()->Draw("ap");
+   double Enr=1; //keV
+   cout<<"QF @ "<<Enr<<" keV: "<<crystal->QF(Enr)<<endl;
    can->Print("TlDopedCsI.pdf");
 
    can->Print("TlDopedCsI.pdf]");
