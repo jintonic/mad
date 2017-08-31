@@ -7,16 +7,16 @@ using namespace MAD;
 
 TlDopedCsI::~TlDopedCsI()
 {
-   if (fQFvsEnr) delete fQFvsEnr;
+   if (fQ) delete fQ;
    if (fLindhardQF) delete fLindhardQF;
 }
 
 //______________________________________________________________________________
 //
  
-TGraphErrors* TlDopedCsI::QFvsEnr()
+TGraphErrors* TlDopedCsI::Q()
 {
-   if (fQFvsEnr) return fQFvsEnr;
+   if (fQ) return fQ;
 
    const Int_t n = 32;
    Double_t x[n] = {22, 31, 38, 48, 71, 98, 127, 26, 42, 65, 91, 124, 190, 196,
@@ -36,37 +36,20 @@ TGraphErrors* TlDopedCsI::QFvsEnr()
       dy[i]=dy[i]/465.*0.14;
    }
 
-   fQFvsEnr = new TGraphErrors(n,x,y,dx,dy);
-   fQFvsEnr->SetTitle("Nuclear quenching of CsI(Tl), DOI:10.1126/science.aao0990");
-   fQFvsEnr->GetXaxis()->SetTitle("Nuclear recoil energy [keV]");
-   fQFvsEnr->GetYaxis()->SetTitle("Quenching factor");
-   fQFvsEnr->GetYaxis()->SetRangeUser(0,0.15);
-   fQFvsEnr->GetYaxis()->SetTitleOffset(1.2);
+   fQ = new TGraphErrors(n,x,y,dx,dy);
+   fQ->SetTitle("Nuclear quenching of CsI(Tl), DOI:10.1126/science.aao0990");
+   fQ->GetXaxis()->SetTitle("Nuclear recoil energy [keV]");
+   fQ->GetYaxis()->SetTitle("Quenching factor");
+   fQ->GetYaxis()->SetRangeUser(0,0.15);
+   fQ->GetYaxis()->SetTitleOffset(1.2);
 
-   return fQFvsEnr;
+   return fQ;
 }
 
 //______________________________________________________________________________
 //
 
-double TlDopedCsI::LindhardQF(double *x, double *par)
+double TlDopedCsI::Q(double Enr)
 {
-   double k = par[0];
-   double Enr = x[0];
-   double z = 54; // average of I (53) and Cs (55)
-   double eps = 11.5*Enr*pow(z,-7./3);
-   double g = 3*pow(eps,0.15) + 0.7*pow(eps,0.6) + eps;
-   return k*g/(1+k*g);
-}
-
-//______________________________________________________________________________
-//
-
-double TlDopedCsI::QF(double Enr)
-{
-   if (!fLindhardQF) fLindhardQF = new TF1("fLindhardQF",this,
-         &TlDopedCsI::LindhardQF,0.1,100,1);
-   fLindhardQF->SetParName(0,"k");
-   QFvsEnr()->Fit(fLindhardQF);
-   return fLindhardQF->Eval(Enr);
+   return 0;
 }
