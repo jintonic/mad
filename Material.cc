@@ -1,22 +1,25 @@
+#include <TObjArray.h>
+#include <TGraph.h>
+
 #include "Material.h"
 #include "Element.h"
-
-#include <TObjArray.h>
+using namespace MAD;
 
 //______________________________________________________________________________
 //
 
-MAD::Material::~Material()
+Material::~Material()
 {
    if (fNatoms) delete[] fNatoms;
    if (fWeights) delete[] fWeights;
    if (fElements) delete[] fElements;
+   if (fSp) delete fSp;
 }
 
 //______________________________________________________________________________
 //
 
-void MAD::Material::Print(Option_t *option)
+void Material::Print(Option_t *option)
 {
    if (!fNelements) {
       Printf("No element in material %s", GetName());
@@ -25,7 +28,7 @@ void MAD::Material::Print(Option_t *option)
 
    Printf("There are %d elements in material %s :", fNelements, GetName());
 
-   for (UShort_t i=0; i<fNelements; i++) {
+   for (unsigned short i=0; i<fNelements; i++) {
       Element *element = (Element*) fElements->At(i);
       Printf("%d: %s weights=%5.2f%%", i,
             element->GetName(), fWeights[i]*100.);
@@ -36,7 +39,7 @@ void MAD::Material::Print(Option_t *option)
 //______________________________________________________________________________
 //
 
-void MAD::Material::AddElement(Element *element, UShort_t nAtoms)
+void Material::AddElement(Element *element, unsigned short nAtoms)
 {
    if (element==0) {
       Warning("AddElement", "Pointer to the element is NULL!");
@@ -52,20 +55,20 @@ void MAD::Material::AddElement(Element *element, UShort_t nAtoms)
 
    if (fNelements==0) {
       fElements = new TObjArray(10);
-      fNatoms   = new UShort_t[100];
-      fWeights  = new Double_t[100];
-      for (UShort_t i=0; i<100; i++) fNatoms[i]=0;
-      for (UShort_t i=0; i<100; i++) fWeights[i]=0;
+      fNatoms   = new unsigned short[100];
+      fWeights  = new double[100];
+      for (unsigned short i=0; i<100; i++) fNatoms[i]=0;
+      for (unsigned short i=0; i<100; i++) fWeights[i]=0;
    }
 
    fElements->Add(element);
    fNatoms[fNelements]=nAtoms;
    fNelements++;
 
-   Double_t totalWeight = 0.;
-   for (UShort_t i=0; i<fNelements; i++) {
+   double totalWeight = 0.;
+   for (unsigned short i=0; i<fNelements; i++) {
       Element *element = (Element*) fElements->At(i);
-      Double_t a = element->A();
+      double a = element->A();
       if (a<=0) {
          Warning("AddElement", "Atomic mass of element <=0!");
          Warning("AddElement", "Failed to calculate weight percentage!");
@@ -73,7 +76,7 @@ void MAD::Material::AddElement(Element *element, UShort_t nAtoms)
       }
       totalWeight += element->A()*fNatoms[i];
    }
-   for (UShort_t i=0; i<fNelements; i++) {
+   for (unsigned short i=0; i<fNelements; i++) {
       Element *element = (Element*) fElements->At(i);
       fWeights[i] = element->A()*fNatoms[i]/totalWeight;
    }
@@ -82,8 +85,69 @@ void MAD::Material::AddElement(Element *element, UShort_t nAtoms)
 //______________________________________________________________________________
 //
 
-MAD::Element* MAD::Material::GetElement(UShort_t i)
+Element* Material::GetElement(unsigned short i)
 {
    if (i<fNelements) return ((Element*) fElements->At(i));
+   return 0;
+}
+
+//______________________________________________________________________________
+//
+
+double Material::Qn(double *x, double *par)
+{
+   double k = par[0];
+   double Enr = x[0];
+   double z = 0;
+   for (unsigned short i=0; i<fNelements; i++) {
+      Element *element = (Element*) fElements->At(i);
+      z = element->Z();
+   }
+   z/=fNelements; // averaged z
+   double eps = 11.5*Enr*pow(z,-7./3);
+   double g = 3*pow(eps,0.15) + 0.7*pow(eps,0.6) + eps;
+   return k*g/(1+k*g);
+}
+
+//______________________________________________________________________________
+//
+
+double Material::Qn(double Enr)
+{
+   double averageZ = 0, averageA = 0;
+   for (unsigned short i=0; i<fNelements; i++) {
+      Element *element = (Element*) fElements->At(i);
+      averageZ = element->Z();
+      averageA = element->A();
+   }
+   averageZ/=fNelements, averageA/=fNelements;
+
+   double k = 0.133 * pow(averageZ, 2./3.) * pow(averageA, -0.5);
+
+   return Qn(&Enr, &k);
+}
+
+//______________________________________________________________________________
+//
+
+double Material::Qs(double Enr)
+{
+   return 0;
+}
+
+//______________________________________________________________________________
+//
+
+double Material::Se()
+{
+   return 0;
+}
+
+//______________________________________________________________________________
+//
+
+TGraph* Material::Sp()
+{
+   if (fSp) return fSp;
    return 0;
 }
