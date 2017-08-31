@@ -16,9 +16,9 @@ int main()
    can->SetLeftMargin(0.11);
    can->Print("TlDopedCsI.pdf[");
 
-   crystal->QFvsEnr()->Draw("ap");
+   crystal->Q()->Draw("ap");
    double Enr=1; //keV
-   cout<<"QF @ "<<Enr<<" keV: "<<crystal->QF(Enr)<<endl;
+   cout<<"QF @ "<<Enr<<" keV: "<<crystal->Q(Enr)<<endl;
    can->Print("TlDopedCsI.pdf");
 
    can->Print("TlDopedCsI.pdf]");
