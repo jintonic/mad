@@ -10,5 +10,6 @@
 #pragma link C++ class MAD::TlDopedCsI+;
 #pragma link C++ class MAD::I+;
 #pragma link C++ class MAD::Cs+;
+#pragma link C++ class MAD::CsI+;
 #pragma link C++ class MAD::Na+;
 #endif
