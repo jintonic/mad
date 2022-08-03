@@ -60,9 +60,7 @@ LIBS    += $(ROOTLIBS)
 # Define things related to rootcint
 # =================================
 
-ROOTCINT = rootcint
-
-ROOTIFIED_SOURCE := $(LIBNAME)Dict.cc
+ROOTIFIED_SOURCE := $(LIBNAME).cc
 ROOTIFIED_HEADER := $(ROOTIFIED_SOURCE:.cc=.h)
 ROOTIFIED_OBJECT := $(ROOTIFIED_SOURCE:.cc=.o)
 
@@ -70,16 +68,15 @@ ROOTIFIED_OBJECT := $(ROOTIFIED_SOURCE:.cc=.o)
 # Define SOURCES, HEADERS & OBJECTS 
 # ==========================================
 
+LINKDEF = LinkDef.h
+
 SOURCES = $(filter-out $(ROOTIFIED_SOURCE), $(wildcard *.cc))
-HEADERS = $(SOURCES:.cc=.h)
+HEADERS = $(filter-out $(LINKDEF), $(wildcard *.h))
 OBJECTS = $(SOURCES:.cc=.o)
 DEPFILE = $(SOURCES:.cc=.d)
 
 EXESRCS = $(wildcard *.C)
 EXES = $(EXESRCS:.C=.exe)
-
-LINKDEF = LinkDef.h
-
 
 # Define LIBRARY, ROOTMAP & variables to create them
 # ==================================================
@@ -97,9 +94,6 @@ DEPENDS = $(shell symbols=$(SYMBOLS); \
 	  grep -E 'T ('$$symbols')::' > /dev/null &&\
 	  echo $$so;\
 	  done | sort -u | tr '\n' ' ')
-
-RLIBMAP = rlibmap
-
 
 # Action starts
 # =============
@@ -125,15 +119,6 @@ endif
 	  sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
 	  rm -f $@.$$$$ 
 
-# lib$(LIBNAME).rootmap can only be created after the creation of lib$(LIBNAME).so. It
-# tells ROOT the dependence among libraries. Putting it along with the
-# corresponding library allows one to use in CINT the functions defined in the
-# library without calling gSystem->Load("lib.so")
-$(ROOTMAP): $(LIBRARY)
-	@echo
-	@echo "* Creating rootmap file:"
-	$(RLIBMAP) -o $(ROOTMAP) -l $(LIBRARY) -d $(DEPENDS) -c $(LINKDEF)
-
 # lib$(LIBNAME).so depends on all *.o files.
 #  The flag "-shared" is used to create shared libs
 #  $@ represents the target, that is, lib$(LIBNAME).so
@@ -153,7 +138,7 @@ $(ROOTIFIED_SOURCE): $(HEADERS) $(LINKDEF)
 	@echo 
 	@echo "* Rootifying files:" 
 	@rm -f $(ROOTIFIED_SOURCE) $(ROOTIFIED_HEADER) 
-	$(ROOTCINT) $(ROOTIFIED_SOURCE) -c -p $(CXXFLAGS) $(HEADERS) $(LINKDEF)
+	rootcling -f $@ -cxxflags="$(CXXFLAGS)" -s lib$(LIBNAME) -rml lib$(LIBNAME).so -rmf $(ROOTMAP) $^
 	@echo 
 	@echo "* Creating object files:" 
 
