@@ -14,7 +14,7 @@ class MAD::NaI:public Material
       :Material(name , title){AddElement(new I(),1);AddElement(new Na(),1);};
     virtual ~NaI();
 
-    classDef(NaI,1);
-}
+    ClassDef(NaI,1);
+};
 
 #endif
