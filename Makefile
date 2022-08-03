@@ -126,7 +126,7 @@ endif
 $(LIBRARY): $(ROOTIFIED_OBJECT) $(OBJECTS)
 	@echo
 	@echo "* Creating shared library:"
-	$(CXX) $(CXXFLAGS) $(LIBS) $(SOFLAGS) -o $@ $^
+	$(CXX) $^ $(CXXFLAGS) -shared $(LIBS) -o $@
 
 # An xxx.o file depends on xxx.cc. It is created with the command:
 # 	g++ -c xxx.cc -o xxx.o
@@ -137,7 +137,6 @@ $(LIBRARY): $(ROOTIFIED_OBJECT) $(OBJECTS)
 $(ROOTIFIED_SOURCE): $(HEADERS) $(LINKDEF)
 	@echo 
 	@echo "* Rootifying files:" 
-	@rm -f $(ROOTIFIED_SOURCE) $(ROOTIFIED_HEADER) 
 	rootcling -f $@ -cxxflags="$(CXXFLAGS)" -s lib$(LIBNAME) -rml lib$(LIBNAME).so -rmf $(ROOTMAP) $^
 	@echo 
 	@echo "* Creating object files:" 
@@ -145,9 +144,9 @@ $(ROOTIFIED_SOURCE): $(HEADERS) $(LINKDEF)
 info: 
 	@echo
 	@echo "target:   $(LIBRARY) $(ROOTMAP)"
-	@echo "sources:  $(SOURCES)"
+	@echo "sources:  $(ROOTIFIED_SOURCE) $(SOURCES)"
 	@echo "headers:  $(HEADERS)"
-	@echo "objects:  $(OBJECTS)"
+	@echo "objects:  $(ROOTIFIED_OBJECT) $(OBJECTS)"
 	@echo 
 	@echo "compiler: $(CXX)"
 	@echo "flags:    $(CXXFLAGS)"
@@ -157,7 +156,7 @@ info:
 	@echo
 
 clean:
-	$(RM) *.o *.exe *.d *.d.* *~ *Dict* $(ROOTMAP) $(LIBRARY)
+	$(RM) *.o *.exe *.d *.d.* *~ $(ROOTIFIED_SOURCE) $(ROOTMAP) $(LIBRARY)
 
 tags:
 	ctags --c-kinds=+p $(HEADERS) $(SOURCES)
@@ -165,7 +164,7 @@ tags:
 $(EXES): %.exe:%.C install
 	$(CXX) $< $(CXXFLAGS) $(LIBS) -lGeom -L. -l$(LIBNAME) -o $@
 
-install: $(ROOTMAP)
+install: $(ROOTIFIED_SOURCE) $(LIBRARY)
 	@echo
 	@echo "* Installing to PREFIX=$(PREFIX)"
 	@echo -n "checking if $(PREFIX) exists..."
