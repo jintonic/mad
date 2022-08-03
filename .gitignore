@@ -1,9 +1,10 @@
+MAD.cc
 *.[ado]
 *.d.*
 
 *.so
-*Dict*
 *.rootmap
+*.pcm
 
 *.ps
 *.eps
